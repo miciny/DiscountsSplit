@@ -1,0 +1,39 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <block wx:else>
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+
+  <view class="inputAll">
+    <view class="inputAlla">
+      <text class="inputAll-label">{{inputAll.goodsAll}}</text>
+      <input class="inputAll-input" name="goodsAll" type='digit' placeholder="{{inputData_goodsAll}}" focus="{{focus}}" bindinput="goodsAllInput"></input>
+    </view>
+
+    <view class="inputAlla">
+      <text class="inputAll-label">{{inputAll.discountsAll}}</text>
+      <input class="inputAll-input" name="discountsAll" type='digit' placeholder="{{inputData_discountsAll}}" bindinput="discountsAllInput"></input>
+    </view>
+
+    <view class="inputAlla">
+      <text class="inputAll-label">{{inputAll.freightAll}}</text>
+      <input class="inputAll-input" name="freightAll" type='digit' placeholder="{{inputData_freightAll}}" bindinput="freightAllInput"></input>
+    </view>
+
+    <view class="inputAlla">
+      <text class="inputAll-label">{{inputAll.aGoodsAll}}</text>
+      <input class="inputAll-input" name="aGoodsAll" type='digit' placeholder="{{inputData_aGoodsAll}}" bindinput="aGoodsAllInput"></input>
+    </view>
+  </view>
+
+<view class="calculate">
+  <button bindtap='doCalculate'>{{"计\t算"}}</button>
+</view>
+
+<text class="result">{{result}}</text>
+
+</view>
