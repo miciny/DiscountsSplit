@@ -25,8 +25,17 @@
     </view>
 
     <view class="inputAlla">
-      <text class="inputAll-label">{{inputAll.aGoodsAll}}</text>
-      <input class="inputAll-input" name="aGoodsAll" type='digit' placeholder="{{inputData_aGoodsAll}}" bindinput="aGoodsAllInput"></input>
+      <text class="inputAll-label">{{inputAll.personNo}}</text>
+      <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+        <view class="picker">
+          {{array[index]}}人(可选)
+        </view>
+      </picker>
+    </view>
+
+    <view class="inputAlla" wx:for="{{array[index]}}">
+      <text class="inputAll-label">{{arrayA[index]}}{{inputAll.aGoodsAll}}</text>
+      <input class="inputAll-input" name="aGoodsAll" type='digit' bindinput="inputB" data-iname='{{arrayA[index]}}'></input>
     </view>
   </view>
 
@@ -35,5 +44,6 @@
 </view>
 
 <text class="result">{{result}}</text>
+<text class="resultFinal">{{resultFinal}}</text>
 
 </view>
