@@ -5,6 +5,7 @@ const app = getApp()
 Page({
   //数据
   data: {
+    //输入框前的文案
     inputAll: { 
       goodsAll: '商品总金额:', 
       discountsAll: '优惠总金额:',
@@ -13,28 +14,19 @@ Page({
       personNo: '总\xa0\xa0\xa0人\xa0\xa0\xa0数:',
     }, 
 
-    index: 0,
-    array: [2, 3, 4, 5, 6, 7, 8],
-    arrayA: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
-    all: {},
+    listData: [], //结果展示数据
+    tabelShowFlag: false, //结果展示的table是否显示
+    index: 0, //选择的人数
+    array: [2, 3, 4, 5, 6, 7, 8], //选择的人数
+    arrayA: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'], //选择的人数对应的字母
+    focus: false, //第一个框是否聚焦
 
-    inputData_goodsAll: '',
-    inputData_discountsAll: '',
-    inputData_freightAll: '',
-    result: '',
-    resultFinal: '',  
-
-    focus: false,
-    userInfo: {},
+    userInfo: {}, //用户信息
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
+
   //事件处理函数
-  bindViewTap: function() {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
-  },
   onLoad: function () {
     if (app.globalData.userInfo) {
       this.setData({
@@ -66,7 +58,7 @@ Page({
       })
     }
   },
-  getUserInfo: function(e) {
+  onGotUserInfo: function(e) {
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
@@ -75,51 +67,19 @@ Page({
     })
   },
 
-  //获取输入框的内容
-  goodsAllInput: function (e) {
-    this.setData({
-      inputData_goodsAll: e.detail.value
-    })
-  },
-  discountsAllInput: function (e) {
-    this.setData({
-      inputData_discountsAll: e.detail.value
-    })
-  },
-  freightAllInput: function (e) {
-    this.setData({
-      inputData_freightAll: e.detail.value
-    })
-  },
-  aGoodsAllInput: function (e) {
-    this.setData({
-      inputData_aGoodsAll: e.detail.value
-    })
-  },
-
   //选择人数
   bindPickerChange: function (e) {
     var oldIndex = this.data.index;
     this.setData({
       index: e.detail.value,
-      result: "",
-      resultFinal: "",
+      listData: [],
+      tabelShowFlag: false
     })
-
-    //重新选择人数，现在处理数据
-    if (oldIndex>this.data.index){
-        var oldAll = this.data.all;
-        var newArrayA = this.data.arrayA.slice(0, this.data.array[e.detail.value]);
-        for (var key in oldAll){
-          if (!this.isInArray3(newArrayA, key)){
-            delete oldAll[key];
-          }
-        }
-    }
   },
 
-  isInArray3: function(arr, value){
-    if(arr.indexOf&&typeof (arr.indexOf) == 'function') {
+  //检查元素是否在数组中
+  isInArray3: function (arr, value) {
+    if (arr.indexOf && typeof (arr.indexOf) == 'function') {
       var index = arr.indexOf(value);
       if (index >= 0) {
         return true;
@@ -128,29 +88,20 @@ Page({
     return false;
   },
 
-  inputB: function (e) {
-    var all = this.data.all;
-    var iname = e.target.dataset.iname;
-    all[iname] = e.detail.value;
-    this.setData({
-      all: all
-    });
-  },
-
   //计算显示
-  doCalculate: function() {
-    var a = parseFloat(this.data.inputData_goodsAll);
-    var b = parseFloat(this.data.inputData_discountsAll);
-    var c = parseFloat(this.data.inputData_freightAll);
+  formSubmit: function (e) {
+
+    var a = parseFloat(e.detail.value['goodsAll']);
+    var b = parseFloat(e.detail.value['discountsAll']);
+    var c = parseFloat(e.detail.value['freightAll']);
 
     if (isNaN(a)) { a = 0 };
     if (isNaN(b)) { b = 0 };
     if (isNaN(c)) { c = 0 };
 
-    var str = "";
-    var strFinal = '';
     var ss = a - b + c;
 
+    //金额大于0，实付大于0，优惠小于商品金额
     if (a <= 0 || ss < 0 || b > a){
       wx.showModal({
         title: '提示',
@@ -158,45 +109,76 @@ Page({
         showCancel: false
       })  
     } else {
-      ss = ss.toFixed(2);
-      str = "实\xa0\xa0\xa0付:￥" + ss
-      var totalPay = 0;
-      var totalGoods = 0;
+      var listDataTem = [];
+      var totalGoods = 0; //记录每个人的实付金额（四舍五入之后的）
+      var totalFreight = 0; //记录每个人的运费金额（四舍五入之后的）
+      var totalDiscounts = 0; //记录每个人的优惠金额（四舍五入之后的）
+      var totalPay = 0; //记录每个人的商品金额，计算的总应付金额，防止金额对不上
+      var flag = false; //是否显示结果
+      ss = ss.toFixed(2); //实付
 
-      for (var key in this.data.all) {
-        var d = parseFloat(this.data.all[key]);
-        if (isNaN(d)) { d = 0 };
+      for (var key in e.detail.value) {
+        if (this.isInArray3(this.data.arrayA, key)) {
+          var d = parseFloat(e.detail.value[key]);
+          if (isNaN(d)) { d = 0 };
 
-        var f = d / a * b;
-        var g = d / a * c;
-        var ee = d - f + g;
+          var f = d / a * b;
+          var g = d / a * c;
+          var ee = d - f + g;
 
-        totalPay += ee;
-        totalGoods += d;
-        f = f.toFixed(2);
-        g = g.toFixed(2);
-        ee = ee.toFixed(2);
+          f = parseFloat(f.toFixed(2)); //优惠分摊
+          g = parseFloat(g.toFixed(2)); //运费分摊
+          ee = parseFloat(ee.toFixed(2)); //应付金额
 
-        str += "\n" + key + "\xa0应付:￥" + ee + "\n\xa0\xa0分摊优惠:￥" + f + ",分摊运费:￥" + g
+          totalPay += ee;
+          totalFreight += (g);
+          totalDiscounts += (f);
+          totalGoods += d;
+
+          var sPay = { 
+            "name": key, 
+            "freight": g, 
+            "discounts": f, 
+            "pay": ee 
+            }
+          listDataTem.push(sPay)
+        }
       }
 
+      //各个人的金额总数等于商品金额
       if (totalGoods != a){
         wx.showModal({
           title: '提示',
           content: '个人金额总计:￥' + totalGoods + '与订单总计:￥' + a + '\n金额不一致',
           showCancel: false
         }) 
-        str = ""
-        strFinal = ""
+        listDataTem = [];
       }else{
-        totalPay = totalPay.toFixed(2);
-        strFinal += "应付总计:\xa0\xa0￥" + totalPay;
+        totalPay = totalPay.toFixed(2); 
+        totalFreight = totalFreight.toFixed(2);
+        totalDiscounts = totalDiscounts.toFixed(2);
+        var sPay = { "name": "总计", "freight": totalFreight, "discounts": totalDiscounts, "pay": totalPay }
+        listDataTem.push(sPay)
+        flag = true
       }
+      this.setData({
+        listData: listDataTem,
+        tabelShowFlag: flag
+      })
     }
+  },
 
-    this.setData({
-      result: str,
-      resultFinal: strFinal,
-    })
+  //分享app
+  onShareAppMessage: function (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    return {
+      title: '分享给好友吧！',
+      path: 'pages/index/index'
+    }
   }
 })
+
+

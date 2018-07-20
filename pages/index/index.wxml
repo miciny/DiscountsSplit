@@ -1,30 +1,30 @@
 <!--index.wxml-->
 <view class="container">
   <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="onGotUserInfo"> 获取头像昵称 </button>
     <block wx:else>
       <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
       <text class="userinfo-nickname">{{userInfo.nickName}}</text>
     </block>
   </view>
 
-  <view class="inputAll">
-    <view class="inputAlla">
-      <text class="inputAll-label">{{inputAll.goodsAll}}</text>
-      <input class="inputAll-input" name="goodsAll" type='digit' placeholder="{{inputData_goodsAll}}" focus="{{focus}}" bindinput="goodsAllInput"></input>
+  <form bindsubmit="formSubmit" bindreset="formReset" class="inputForm">
+    <view class="section">
+      <view class="inputAll-label">{{inputAll.goodsAll}}</view>
+      <input class="inputAll-input" name="goodsAll" type='digit' focus="{{focus}}" />
     </view>
 
-    <view class="inputAlla">
-      <text class="inputAll-label">{{inputAll.discountsAll}}</text>
-      <input class="inputAll-input" name="discountsAll" type='digit' placeholder="{{inputData_discountsAll}}" bindinput="discountsAllInput"></input>
+    <view class="section">
+      <view class="inputAll-label">{{inputAll.discountsAll}}</view>
+      <input class="inputAll-input" name="discountsAll" type='digit' />
     </view>
 
-    <view class="inputAlla">
-      <text class="inputAll-label">{{inputAll.freightAll}}</text>
-      <input class="inputAll-input" name="freightAll" type='digit' placeholder="{{inputData_freightAll}}" bindinput="freightAllInput"></input>
+    <view class="section">
+      <view class="inputAll-label">{{inputAll.freightAll}}</view>
+      <input class="inputAll-input" name="freightAll" type='digit' />
     </view>
 
-    <view class="inputAlla">
+    <view class="section">
       <text class="inputAll-label">{{inputAll.personNo}}</text>
       <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
         <view class="picker">
@@ -33,17 +33,37 @@
       </picker>
     </view>
 
-    <view class="inputAlla" wx:for="{{array[index]}}">
+    <view class="section" wx:for="{{array[index]}}">
       <text class="inputAll-label">{{arrayA[index]}}{{inputAll.aGoodsAll}}</text>
-      <input class="inputAll-input" name="aGoodsAll" type='digit' bindinput="inputB" data-iname='{{arrayA[index]}}'></input>
+      <input class="inputAll-input" name="{{arrayA[index]}}" type='digit'></input>
     </view>
+  
+    <view class="calculateView">
+      <button class="calculateBtn" formType="submit">计\t算</button>
+    </view>
+  </form>
+
+<view class="table" wx:if="{{tabelShowFlag}}">
+  <view class="tr bg-title">
+    <view class="th">参与人员</view>
+    <view class="th">分摊运费</view>
+    <view class="th ">分摊优惠</view>
+    <view class="th ">应付金额</view>
   </view>
-
-<view class="calculate">
-  <button bindtap='doCalculate'>{{"计\t算"}}</button>
+  <block wx:for="{{listData}}" wx:key="{{code}}">
+    <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
+      <view class="td">{{item.name}}</view>
+      <view class="td">{{item.freight}}</view>
+      <view class="td">{{item.discounts}}</view>
+      <view class="td">{{item.pay}}</view>
+    </view>
+    <view class="tr bg-w" wx:else>
+      <view class="td">{{item.name}}</view>
+      <view class="td">{{item.freight}}</view>
+      <view class="td">{{item.discounts}}</view>
+      <view class="td">{{item.pay}}</view>
+    </view>
+  </block>
 </view>
-
-<text class="result">{{result}}</text>
-<text class="resultFinal">{{resultFinal}}</text>
 
 </view>
