@@ -5,8 +5,8 @@
   ],
   "window":{
     "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#F7F7F7",
-    "navigationBarTitleText": "WeChat",
+    "navigationBarBackgroundColor": "#FFFAF0",
+    "navigationBarTitleText": "优惠拆分",
     "navigationBarTextStyle":"black"
   }
 }

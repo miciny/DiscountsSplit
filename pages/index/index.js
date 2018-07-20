@@ -90,6 +90,7 @@ Page({
 
   //计算显示
   formSubmit: function (e) {
+    console.log(e.detail.value)
 
     var a = parseFloat(e.detail.value['goodsAll']);
     var b = parseFloat(e.detail.value['discountsAll']);
@@ -175,7 +176,7 @@ Page({
       console.log(res.target)
     }
     return {
-      title: '分享给好友吧！',
+      title: '好友分享的神秘APP',
       path: 'pages/index/index'
     }
   }

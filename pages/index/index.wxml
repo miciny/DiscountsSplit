@@ -28,7 +28,7 @@
       <text class="inputAll-label">{{inputAll.personNo}}</text>
       <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
         <view class="picker">
-          {{array[index]}}人(可选)
+          {{array[index]}}人(点击可选)
         </view>
       </picker>
     </view>
