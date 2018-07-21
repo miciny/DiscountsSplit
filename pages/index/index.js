@@ -17,8 +17,8 @@ Page({
     listData: [], //结果展示数据
     tabelShowFlag: false, //结果展示的table是否显示
     index: 0, //选择的人数
-    array: [2, 3, 4, 5, 6, 7, 8], //选择的人数
-    arrayA: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'], //选择的人数对应的字母
+    array: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], //选择的人数
+    arrayA: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'], //选择的人数对应的字母
     focus: false, //第一个框是否聚焦
 
     userInfo: {}, //用户信息
@@ -138,6 +138,7 @@ Page({
 
           var sPay = { 
             "name": key, 
+            "goods": d,
             "freight": g, 
             "discounts": f, 
             "pay": ee 
@@ -158,7 +159,7 @@ Page({
         totalPay = totalPay.toFixed(2); 
         totalFreight = totalFreight.toFixed(2);
         totalDiscounts = totalDiscounts.toFixed(2);
-        var sPay = { "name": "总计", "freight": totalFreight, "discounts": totalDiscounts, "pay": totalPay }
+        var sPay = { "name": "总计", "goods": totalGoods, "freight": totalFreight, "discounts": totalDiscounts, "pay": totalPay }
         listDataTem.push(sPay)
         flag = true
       }
@@ -179,7 +180,25 @@ Page({
       title: '好友分享的神秘APP',
       path: 'pages/index/index'
     }
-  }
+  },
+
+  //
+  onConfirm: function () {
+    this.hideModal()
+  },
+
+  /**
+  * 隐藏模态对话框
+  */
+  hideModal: function () {
+    this.setData({
+      tabelShowFlag: false
+    });
+  },
+  /**
+  * 弹出框蒙层截断touchmove事件,但是模态本身能滚动时，此方法无效
+  */
+  preventTouchMove: function () {
+    return;
+  },
 })
-
-
