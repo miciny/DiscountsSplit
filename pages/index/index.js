@@ -16,7 +16,7 @@ Page({
 
     listData: [], //结果展示数据
     tabelShowFlag: false, //结果展示的table是否显示
-    index: 0, //选择的人数
+    personNm: 0, //选择的人数的底标
     array: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], //选择的人数
     arrayA: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'], //选择的人数对应的字母
     focus: false, //第一个框是否聚焦
@@ -59,7 +59,6 @@ Page({
     }
   },
   onGotUserInfo: function(e) {
-    console.log(e)
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
       userInfo: e.detail.userInfo,
@@ -69,9 +68,8 @@ Page({
 
   //选择人数
   bindPickerChange: function (e) {
-    var oldIndex = this.data.index;
     this.setData({
-      index: e.detail.value,
+      personNm: e.detail.value,
       listData: [],
       tabelShowFlag: false
     })
@@ -88,19 +86,25 @@ Page({
     return false;
   },
 
+  //价格保留两位，传入Float，返回String，保留两位小数的
+  priceForm: function(price) {
+    price = price.toFixed(2)
+    return price
+  },
+  //取价格，传入String 返回float
+  getPrice: function (price) {
+    price = parseFloat(price)
+    if (isNaN(price)) { price = 0 };
+    return price
+  },
+
   //计算显示
   formSubmit: function (e) {
-    console.log(e.detail.value)
 
-    var a = parseFloat(e.detail.value['goodsAll']);
-    var b = parseFloat(e.detail.value['discountsAll']);
-    var c = parseFloat(e.detail.value['freightAll']);
-
-    if (isNaN(a)) { a = 0 };
-    if (isNaN(b)) { b = 0 };
-    if (isNaN(c)) { c = 0 };
-
-    var ss = a - b + c;
+    var a = this.getPrice(e.detail.value['goodsAll']); //商品总金额
+    var b = this.getPrice(e.detail.value['discountsAll']); //总优惠
+    var c = this.getPrice(e.detail.value['freightAll']); //总运费
+    var ss = a - b + c;  //实付金额
 
     //金额大于0，实付大于0，优惠小于商品金额
     if (a <= 0 || ss < 0 || b > a){
@@ -116,26 +120,24 @@ Page({
       var totalDiscounts = 0; //记录每个人的优惠金额（四舍五入之后的）
       var totalPay = 0; //记录每个人的商品金额，计算的总应付金额，防止金额对不上
       var flag = false; //是否显示结果
-      ss = ss.toFixed(2); //实付
 
       for (var key in e.detail.value) {
         if (this.isInArray3(this.data.arrayA, key)) {
-          var d = parseFloat(e.detail.value[key]);
-          if (isNaN(d)) { d = 0 };
-
-          var f = d / a * b;
-          var g = d / a * c;
-          var ee = d - f + g;
-
-          f = parseFloat(f.toFixed(2)); //优惠分摊
-          g = parseFloat(g.toFixed(2)); //运费分摊
-          ee = parseFloat(ee.toFixed(2)); //应付金额
+          var d = this.getPrice(e.detail.value[key]); //每个人的金额
+          var f = d / a * b; //优惠分摊
+          var g = d / a * c; //运费分摊
+          var ee = d - f + g; //应付金额
 
           totalPay += ee;
           totalFreight += (g);
           totalDiscounts += (f);
           totalGoods += d;
 
+          //要输出时，四舍五入一下
+          f = this.priceForm(f); 
+          g = this.priceForm(g); 
+          ee = this.priceForm(ee); 
+          d = this.priceForm(d); 
           var sPay = { 
             "name": key, 
             "goods": d,
@@ -148,18 +150,20 @@ Page({
       }
 
       //各个人的金额总数等于商品金额
-      if (totalGoods != a){
+      var totalGoodsForm = this.priceForm(totalGoods); //  要比较，处理下小数
+      if (totalGoodsForm != a){
         wx.showModal({
           title: '提示',
-          content: '个人金额总计:￥' + totalGoods + '与订单总计:￥' + a + '\n金额不一致',
+          content: '个人金额总计:￥' + totalGoodsForm + '与订单总计:￥' + a + '\n金额不一致',
           showCancel: false
         }) 
         listDataTem = [];
       }else{
-        totalPay = totalPay.toFixed(2); 
-        totalFreight = totalFreight.toFixed(2);
-        totalDiscounts = totalDiscounts.toFixed(2);
-        var sPay = { "name": "总计", "goods": totalGoods, "freight": totalFreight, "discounts": totalDiscounts, "pay": totalPay }
+        //  要显示，处理下小数
+        totalPay = this.priceForm(totalPay); 
+        totalFreight = this.priceForm(totalFreight);
+        totalDiscounts = this.priceForm(totalDiscounts);
+        var sPay = { "name": "总计", "goods": totalGoodsForm, "freight": totalFreight, "discounts": totalDiscounts, "pay": totalPay }
         listDataTem.push(sPay)
         flag = true
       }
@@ -172,17 +176,13 @@ Page({
 
   //分享app
   onShareAppMessage: function (res) {
-    if (res.from === 'button') {
-      // 来自页面内转发按钮
-      console.log(res.target)
-    }
     return {
-      title: '好友分享的神秘APP',
+      title: '好用的拼单拆分计算小程序',
       path: 'pages/index/index'
     }
   },
 
-  //
+  //确认键
   onConfirm: function () {
     this.hideModal()
   },

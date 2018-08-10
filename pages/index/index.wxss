@@ -1,45 +1,45 @@
 /**index.wxss**/
 
-
 .userinfo {
   display: flex;
   margin-left: 15px;
   flex-direction: row;
   align-items: center;
 }
+
 .userinfo-avatar {
   width: 80rpx;
   height: 80rpx;
   margin: 10rpx;
   border-radius: 50%;
 }
+
 .userinfo-nickname {
   color: #aaa;
   margin-left: 10px;
 }
 
-
-.inputForm{
+.inputForm {
   width: 100%;
 }
+
 .section {
   display: flex;
   flex-direction: row;
   width: 100%;
   height: 25px;
   vertical-align: middle;
-
-  background: #b9cf6a;
-  background: rgba(255, 255, 255, .3);
-  border-color: rgba(255, 255, 255, .6);
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(231, 224, 224, 0.6);
   border-style: solid;
   border-width: 2px;
   border-radius: 5px;
   line-height: 100%;
   list-style: none;
   padding: 5px 5px;
-  margin-bottom: 2px;
+  margin-bottom: -2px;
 }
+
 .inputAll-label {
   font-size: 35rpx;
   width: 200rpx;
@@ -49,8 +49,9 @@
   padding: 1px 1px 1px 2px;
   color: #888;
 }
+
 .inputAll-input {
-  border: 1px solid #DADADA;
+  border: 1px solid #dadada;
   color: #888;
   margin-left: 5px;
   margin-right: 6px;
@@ -58,43 +59,49 @@
   padding: 1px 1px 1px 2px;
   width: 50%;
   font-size: 35rpx;
-  line-height:15px;
+  line-height: 15px;
   border-radius: 5px;
   background-color: #fff;
-  box-shadow: inset 0px 1px 4px #ECECEC;
-  -moz-box-shadow: inset 0px 1px 4px #ECECEC;
-  -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+  box-shadow: inset 0px 1px 4px #ececec;
+  -moz-box-shadow: inset 0px 1px 4px #ececec;
+  -webkit-box-shadow: inset 0px 1px 4px #ececec;
 }
+
 .picker {
   padding-left: 5px;
   font-size: 32rpx;
   margin-top: 4px;
   height: 7px;
+  color: darkgreen;
+  text-decoration: underline;
+  font-weight: bold;
 }
+
 .calculateView {
   margin-top: 25rpx;
   width: 100%;
   align-content: center;
   align-items: center;
 }
+
 .calculateBtn {
   width: 40%;
   line-height: 38px;
   text-align: center;
   color: #000;
-  text-shadow:1px 1px 1px #999;
+  text-shadow: 1px 1px 1px #999;
   border-radius: 5px;
   position: relative;
   overflow: hidden;
   background-color: #fff;
 }
 
-
 .table {
   border: 0px solid darkgray;
   width: 100%;
   margin-top: 0px;
 }
+
 .tr {
   display: flex;
   width: 100%;
@@ -102,23 +109,28 @@
   height: 2rem;
   align-items: center;
 }
+
 .td {
-    width:100%;
-    justify-content: center;
-    text-align: center;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
 }
-.bg-title{
+
+.bg-title {
   background: snow;
   font-size: 30rpx;
 }
-.bg-g{
-  background: #E6F3F9;
+
+.bg-g {
+  background: #e6f3f9;
   font-size: 30rpx;
 }
-.bg-w{
+
+.bg-w {
   background: lightgray;
   font-size: 30rpx;
 }
+
 .th {
   width: 100%;
   justify-content: center;
@@ -130,41 +142,49 @@
 }
 
 .modal-mask {
- width: 100%;
- height: 100%;
- position: fixed;
- top: 0;
- left: 0;
- background: #000;
- opacity: 0.99;
- z-index: 1000;
- color: #fff;
- overflow-y: hidden;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #000;
+  opacity: 0.7;
+  z-index: 1000;
+  color: #fff;
+  overflow-y: hidden;
 }
+
 .modal-dialog {
- width: 98%;
- overflow: hidden;
- position: fixed;
- top: 20%;
- left: 0;
- z-index: 9999;
- background: #f9f9f9;
- margin-left: 1%;
- border-radius: 36rpx;
+  width: 98%;
+  overflow: hidden;
+  position: fixed;
+  top: 20%;
+  left: 0;
+  z-index: 9999;
+  background: #f9f9f9;
+  margin-left: 1%;
+  border-radius: 36rpx;
 }
+
 .modal-content {
- padding: 0rpx 0rpx;
+  padding: 0rpx 0rpx;
 }
+
 .modal-footer {
- display: flex;
- flex-direction: row;
- height: 86rpx;
- border-top: 1px solid #dedede;
- font-size: 34rpx;
- line-height: 86rpx;
+  display: flex;
+  flex-direction: row;
+  height: 86rpx;
+  border-top: 1px solid #dedede;
+  font-size: 34rpx;
+  line-height: 86rpx;
 }
+
 .btn-confirm {
- width: 100%;
- color: #ec5300;
- text-align: center;
+  width: 100%;
+  height: 100%;
+  font-size: 35rpx;
+  color: #000;
+  text-align: center;
+  border-style: none;
+  border-color: white;
 }
