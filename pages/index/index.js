@@ -7,11 +7,11 @@ Page({
   data: {
     //输入框前的文案
     inputAll: { 
-      goodsAll: '商品总金额:', 
-      discountsAll: '优惠总金额:',
-      freightAll: '总\xa0\xa0\xa0运\xa0\xa0\xa0费:',
-      aGoodsAll: '(点击可输入)',
-      personNo: '总\xa0\xa0\xa0人\xa0\xa0\xa0数:',
+      goodsAllTitle: '人员名称可修改\n选择人数，输入个人商品金额，即可计算出每个人的分摊金额', 
+      discountsAll: '优\xa0惠\xa0金\xa0额\xa0:',
+      freightAll: '总\xa0\xa0\xa0运\xa0\xa0\xa0费\xa0:',
+      aGoodsAll: '(可修改)\xa0\xa0\xa0:',
+      personNo: '总\xa0\xa0\xa0人\xa0\xa0\xa0数\xa0:',
     }, 
 
     listData: [], //结果展示数据，【“A”：“22.20”】
@@ -104,32 +104,57 @@ Page({
 
   //计算显示
   formSubmit: function (e) {
-
-    var a = this.getPrice(e.detail.value['goodsAll']); //商品总金额
     var b = this.getPrice(e.detail.value['discountsAll']); //总优惠
     var c = this.getPrice(e.detail.value['freightAll']); //总运费
-    var ss = a - b + c;  //实付金额
 
-    //金额大于0，实付大于0，优惠小于商品金额
-    if (a <= 0 || ss < 0 || b > a){
-      var str = ""
-      if (a <= 0){
-        str = "数据有误: 请输入正确的商品总金额"
-      } else if (b > a) {
-        str = "数据有误: 优惠金额大于商品总金额"
-      } else if (ss < 0) {
-        str = "数据有误: 实付金额小于0元"
-      }
-
+    //金额大于0的检测
+    if (c < 0 || b < 0){
       wx.showModal({
         title: '提示',
-        content: str,
+        content: "数据有误,金额需大于0",
         showCancel: false
       })  
+      return
     } else {
+      var totalGoods = 0; //记录总的商品金额（四舍五入之后的）
+
+      //先算出总金额
+      for (var key in e.detail.value) {
+        if (this.isInArray3(this.data.arrayA, key)) {
+          var d = this.getPrice(e.detail.value[key]); //每个人的金额
+          if ( d < 0 ){
+            wx.showModal({
+              title: '提示',
+              content: "数据有误,金额需大于0",
+              showCancel: false
+            })
+            return
+          }
+          totalGoods += d;
+        }
+      }
+
+      //优惠小于商品金额
+      var ss = totalGoods - b + c;  //实付金额
+      if (b > totalGoods) {
+        wx.showModal({
+          title: '提示',
+          content: "数据有误: 优惠金额大于商品总金额",
+          showCancel: false
+        })
+        return
+      }else if(totalGoods <= 0){
+        wx.showModal({
+          title: '提示',
+          content: "数据有误: 请输入金额",
+          showCancel: false
+        })
+        return
+      }
+
+      //金额无误，继续计算
       var listDataTem = [];
       var nameListData = new Array();; //名字和字母的对应关系
-      var totalGoods = 0; //记录每个人的实付金额（四舍五入之后的）
       var totalFreight = 0; //记录每个人的运费金额（四舍五入之后的）
       var totalDiscounts = 0; //记录每个人的优惠金额（四舍五入之后的）
       var totalPay = 0; //记录每个人的商品金额，计算的总应付金额，防止金额对不上
@@ -138,14 +163,13 @@ Page({
       for (var key in e.detail.value) {
         if (this.isInArray3(this.data.arrayA, key)) {
           var d = this.getPrice(e.detail.value[key]); //每个人的金额
-          var f = d / a * b; //优惠分摊
-          var g = d / a * c; //运费分摊
+          var f = d / totalGoods * b; //优惠分摊
+          var g = d / totalGoods * c; //运费分摊
           var ee = d - f + g; //应付金额
 
           totalPay += ee;
           totalFreight += (g);
           totalDiscounts += (f);
-          totalGoods += d;
 
           //要输出时，四舍五入一下
           f = this.priceForm(f); 
@@ -177,24 +201,15 @@ Page({
         listDataTem[item].name = name;
       }
 
-      //各个人的金额总数等于商品金额
-      var totalGoodsForm = this.priceForm(totalGoods); //  要比较，处理下小数
-      if (totalGoodsForm != a){
-        wx.showModal({
-          title: '提示',
-          content: '个人金额总计:￥' + totalGoodsForm + '与订单总计:￥' + a + '\n金额不一致',
-          showCancel: false
-        }) 
-        listDataTem = [];
-      }else{
-        //  要显示，处理下小数
-        totalPay = this.priceForm(totalPay); 
-        totalFreight = this.priceForm(totalFreight);
-        totalDiscounts = this.priceForm(totalDiscounts);
-        var sPay = { "name": "总计", "goods": totalGoodsForm, "freight": totalFreight, "discounts": totalDiscounts, "pay": totalPay }
-        listDataTem.push(sPay)
-        flag = true
-      }
+      // 要显示，处理下小数
+      var totalGoodsForm = this.priceForm(totalGoods);
+      totalPay = this.priceForm(totalPay);
+      totalFreight = this.priceForm(totalFreight);
+      totalDiscounts = this.priceForm(totalDiscounts);
+      var sPay = { "name": "总计", "goods": totalGoodsForm, "freight": totalFreight, "discounts": totalDiscounts, "pay": totalPay }
+      listDataTem.push(sPay)
+      flag = true
+
       this.setData({
         listData: listDataTem,
         tabelShowFlag: flag

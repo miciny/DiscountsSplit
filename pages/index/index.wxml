@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view class="container" scroll-y="false">
+<view class="container" scroll-y="false" scroll-x="false">
 
   <!--头像-->
   <view class="userinfo">
@@ -15,14 +15,12 @@
   <!--输入表格-->
   <form bindsubmit="formSubmit" bindreset="formReset" class="inputForm">
     <view class="section section-top">
-      <view class="inputAll-must-label">*</view>
-      <view class="inputAll-label">{{inputAll.goodsAll}}</view>
-      <input class="inputAll-input" name="goodsAll" placeholder='请输入金额' type='digit' value='{{resetNull}}' focus="{{focus}}" />
+      <text class="inputAll-label-title">{{inputAll.goodsAllTitle}}</text>
     </view>
 
     <view class="section">
       <view class="inputAll-label">{{inputAll.discountsAll}}</view>
-      <input class="inputAll-input" name="discountsAll" placeholder='0.00' value='{{resetNull}}' type='digit' />
+      <input class="inputAll-input" name="discountsAll" placeholder='0.00' value='{{resetNull}}' type='digit' focus="{{focus}}"/>
     </view>
 
     <view class="section">
@@ -31,6 +29,7 @@
     </view>
 
     <view class="section">
+      <view class="inputAll-must-label">*</view>
       <text class="inputAll-label">{{inputAll.personNo}}</text>
       <picker bindchange="bindPickerChange" value="{{personNm}}" range="{{array}}">
         <view class="picker">
@@ -67,7 +66,14 @@
         </view>
         <scroll-view scroll-y style="height: 250px;">
           <block wx:for="{{listData}}" wx:key="{{code}}">
-            <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
+            <view class="tr bg-t" wx:if="{{index == listData.length-1}}">
+              <view class="td td-totle">{{item.name}}</view>
+              <view class="td td-totle">{{item.goods}}</view>
+              <view class="td td-totle">{{item.discounts}}</view>
+              <view class="td td-totle">{{item.freight}}</view>
+              <view class="td td-totle">{{item.pay}}</view>
+            </view>
+            <view class="tr bg-g" wx:elif="{{index % 2 == 0}}">
               <view class="td td-name">{{item.name}}</view>
               <view class="td">{{item.goods}}</view>
               <view class="td">{{item.discounts}}</view>

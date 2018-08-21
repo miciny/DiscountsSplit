@@ -56,23 +56,31 @@
 }
 .section-top{
   border-top-style: solid;
-  border-top-width: 5px;
+  border-top-width: 8px;
+  height: 40px;
 }
 
 .inputAll-must-label{
-  font-size: 35rpx;
+  font-size: 30rpx;
   width: 10px;
   margin-right: -10px;
-  margin-top: 8px;
+  margin-top: 10px;
   height: 7px;
   color: red;
 }
+.inputAll-label-title {
+  font-size: 24rpx;
+  margin-left: 5px;
+  margin-top: 3px;
+  padding: 1px 1px 1px 2px;
+  color: grey;
+}
 
 .inputAll-label {
-  font-size: 35rpx;
-  width: 200rpx;
+  font-size: 30rpx;
+  width: 180rpx;
   margin-left: 10px;
-  margin-top: 5px;
+  margin-top: 8px;
   height: 7px;
   padding: 1px 1px 1px 2px;
   color: black;
@@ -80,7 +88,7 @@
 
 .inputAll-name-input{
   font-size: 30rpx;
-  width: 200rpx;
+  width: 180rpx;
   margin-left: 10px;
   margin-top: 2px;
   padding: 1px 1px 1px 3px;
@@ -90,7 +98,7 @@
   color: #888;
   margin-left: 5px;
   margin-right: 6px;
-  margin-top: 2px;
+  margin-top: 4px;
   outline: 0 none;
   padding: 1px 1px 1px 5px;
   width: 60%;
@@ -101,7 +109,7 @@
 .picker {
   padding-left: 12px;
   font-size: 32rpx;
-  margin-top: 5px;
+  margin-top: 8px;
   height: 7px;
   color: darkgreen;
   text-decoration: underline;
@@ -162,6 +170,11 @@
   font-size: 30rpx;
 }
 
+.bg-t {
+  background: rgb(248, 243, 243);
+  font-size: 30rpx;
+}
+
 .th {
   width: 100%;
   justify-content: center;
@@ -203,6 +216,10 @@
 
 .td-name {
   color: chocolate;
+}
+
+.td-totle{
+  color: red;
 }
 
 .modal-footer {

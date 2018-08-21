@@ -1,5 +1,6 @@
 {
   "window":{
-  "backgroundColor": "#FFFAF0"
+    "backgroundColor": "#FFFAF0",
+    "scroll-x": "false"
   }
 }
