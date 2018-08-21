@@ -5,11 +5,13 @@
   margin-left: 15px;
   flex-direction: row;
   align-items: center;
+  width: 100%;
+  height: 90rpx;
 }
 
 .userinfo-avatar {
-  width: 80rpx;
-  height: 80rpx;
+  width: 70rpx;
+  height: 70rpx;
   margin: 10rpx;
   border-radius: 50%;
 }
@@ -17,6 +19,20 @@
 .userinfo-nickname {
   color: #aaa;
   margin-left: 10px;
+}
+
+.userInfoGetBtn {
+  margin-left: 5px;
+  font-size: 30rpx;
+  float: left;
+}
+
+.resetBtn {
+  margin-right: 30px;
+  font-size: 30rpx;
+  height: 70rpx;
+  float: right;
+  background-color: #43CD80;
 }
 
 .inputForm {
@@ -27,50 +43,65 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 25px;
+  height: 30px;
   vertical-align: middle;
   background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(231, 224, 224, 0.6);
-  border-style: solid;
-  border-width: 2px;
-  border-radius: 5px;
+  border-color: rgba(231, 224, 224, 0.8);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
   line-height: 100%;
   list-style: none;
   padding: 5px 5px;
-  margin-bottom: -2px;
+  margin-bottom: 0px;
+}
+.section-top{
+  border-top-style: solid;
+  border-top-width: 5px;
+}
+
+.inputAll-must-label{
+  font-size: 35rpx;
+  width: 10px;
+  margin-right: -10px;
+  margin-top: 8px;
+  height: 7px;
+  color: red;
 }
 
 .inputAll-label {
   font-size: 35rpx;
   width: 200rpx;
   margin-left: 10px;
-  margin-top: 4px;
+  margin-top: 5px;
   height: 7px;
   padding: 1px 1px 1px 2px;
-  color: #888;
+  color: black;
+}
+
+.inputAll-name-input{
+  font-size: 30rpx;
+  width: 200rpx;
+  margin-left: 10px;
+  margin-top: 2px;
+  padding: 1px 1px 1px 3px;
 }
 
 .inputAll-input {
-  border: 1px solid #dadada;
   color: #888;
   margin-left: 5px;
   margin-right: 6px;
+  margin-top: 2px;
   outline: 0 none;
-  padding: 1px 1px 1px 2px;
-  width: 50%;
-  font-size: 35rpx;
+  padding: 1px 1px 1px 5px;
+  width: 60%;
+  font-size: 30rpx;
   line-height: 15px;
-  border-radius: 5px;
-  background-color: #fff;
-  box-shadow: inset 0px 1px 4px #ececec;
-  -moz-box-shadow: inset 0px 1px 4px #ececec;
-  -webkit-box-shadow: inset 0px 1px 4px #ececec;
 }
 
 .picker {
-  padding-left: 5px;
+  padding-left: 12px;
   font-size: 32rpx;
-  margin-top: 4px;
+  margin-top: 5px;
   height: 7px;
   color: darkgreen;
   text-decoration: underline;
@@ -93,7 +124,7 @@
   border-radius: 5px;
   position: relative;
   overflow: hidden;
-  background-color: #fff;
+  background-color: #66CDAA;
 }
 
 .table {
@@ -148,7 +179,7 @@
   top: 0;
   left: 0;
   background: #000;
-  opacity: 0.7;
+  opacity: 0.9;
   z-index: 1000;
   color: #fff;
   overflow-y: hidden;
@@ -168,6 +199,10 @@
 
 .modal-content {
   padding: 0rpx 0rpx;
+}
+
+.td-name {
+  color: chocolate;
 }
 
 .modal-footer {

@@ -3,28 +3,31 @@
 
   <!--头像-->
   <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="onGotUserInfo"> 获取头像昵称 </button>
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="onGotUserInfo" class="userInfoGetBtn"> 获取头像昵称 </button>
     <block wx:else>
       <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
       <text class="userinfo-nickname">{{userInfo.nickName}}</text>
     </block>
+
+    <button class="resetBtn" bindtap="resetData"> 清 空 </button>
   </view>
 
   <!--输入表格-->
   <form bindsubmit="formSubmit" bindreset="formReset" class="inputForm">
-    <view class="section">
+    <view class="section section-top">
+      <view class="inputAll-must-label">*</view>
       <view class="inputAll-label">{{inputAll.goodsAll}}</view>
-      <input class="inputAll-input" name="goodsAll" type='digit' focus="{{focus}}" />
+      <input class="inputAll-input" name="goodsAll" placeholder='请输入金额' type='digit' value='{{resetNull}}' focus="{{focus}}" />
     </view>
 
     <view class="section">
       <view class="inputAll-label">{{inputAll.discountsAll}}</view>
-      <input class="inputAll-input" name="discountsAll" type='digit' />
+      <input class="inputAll-input" name="discountsAll" placeholder='0.00' value='{{resetNull}}' type='digit' />
     </view>
 
     <view class="section">
       <view class="inputAll-label">{{inputAll.freightAll}}</view>
-      <input class="inputAll-input" name="freightAll" type='digit' />
+      <input class="inputAll-input" name="freightAll" placeholder='0.00' value='{{resetNull}}' type='digit' />
     </view>
 
     <view class="section">
@@ -36,9 +39,9 @@
       </picker>
     </view>
 
-    <view class="section" wx:for="{{array[personNm]}}">
-      <text class="inputAll-label">{{arrayA[index]}}{{inputAll.aGoodsAll}}</text>
-      <input class="inputAll-input" name="{{arrayA[index]}}" type='digit'></input>
+    <view class="section" wx:for="{{array[personNm]}}" wx:key="*this">
+      <input class="inputAll-name-input" name="name_{{arrayA[index]}}"  placeholder='{{arrayA[index]}}{{inputAll.aGoodsAll}}' value='{{resetNull}}'></input>
+      <input class="inputAll-input" name="{{arrayA[index]}}" placeholder='0.00' type='digit' value='{{resetNull}}'></input>
     </view>
 
     <view class="calculateView">
@@ -65,14 +68,14 @@
         <scroll-view scroll-y style="height: 250px;">
           <block wx:for="{{listData}}" wx:key="{{code}}">
             <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
-              <view class="td">{{item.name}}</view>
+              <view class="td td-name">{{item.name}}</view>
               <view class="td">{{item.goods}}</view>
               <view class="td">{{item.discounts}}</view>
               <view class="td">{{item.freight}}</view>
               <view class="td">{{item.pay}}</view>
             </view>
             <view class="tr bg-w" wx:else>
-              <view class="td">{{item.name}}</view>
+              <view class="td td-name">{{item.name}}</view>
               <view class="td">{{item.goods}}</view>
               <view class="td">{{item.discounts}}</view>
               <view class="td">{{item.freight}}</view>
