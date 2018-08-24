@@ -7,7 +7,7 @@ Page({
   data: {
     //输入框前的文案
     inputAll: { 
-      goodsAllTitle: '人员名称可修改\n选择人数，输入个人商品金额，即可计算出每个人的分摊金额', 
+      goodsAllTitle: '人员名称可修改\n选择人数，输入个人拼单金额，即可计算出每个人的分摊金额', 
       discountsAll: '优\xa0惠\xa0金\xa0额\xa0:',
       freightAll: '总\xa0\xa0\xa0运\xa0\xa0\xa0费\xa0:',
       aGoodsAll: '(可修改)\xa0\xa0\xa0:',
@@ -21,7 +21,10 @@ Page({
     arrayA: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'], //选择的人数对应的字母
     focus: false, //第一个框是否聚焦
 
-    resetNull: "",
+    resetNull: "", //清空时，给输入框的赋值
+    scrollHeight:"", //页面滚动高度赋值
+    animationData: {}, //动画
+    maskAnimationData: {},
 
     userInfo: {}, //用户信息
     hasUserInfo: false,
@@ -59,12 +62,23 @@ Page({
         }
       })
     }
+    //获取屏幕高度，用于滚动scroll设置高度用
+    wx.getSystemInfo({
+      success: res => {
+        this.setData({
+          scrollHeight: parseInt(res.windowHeight)
+        })
+      }
+    });
   },
+
+  //获取用户信息
   onGotUserInfo: function(e) {
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
       userInfo: e.detail.userInfo,
-      hasUserInfo: true
+      hasUserInfo: true,
+      focus: true
     })
   },
 
@@ -163,27 +177,29 @@ Page({
       for (var key in e.detail.value) {
         if (this.isInArray3(this.data.arrayA, key)) {
           var d = this.getPrice(e.detail.value[key]); //每个人的金额
-          var f = d / totalGoods * b; //优惠分摊
-          var g = d / totalGoods * c; //运费分摊
-          var ee = d - f + g; //应付金额
+          if (d > 0 ){  //小于等于0的不显示结果
+            var f = d / totalGoods * b; //优惠分摊
+            var g = d / totalGoods * c; //运费分摊
+            var ee = d - f + g; //应付金额
 
-          totalPay += ee;
-          totalFreight += (g);
-          totalDiscounts += (f);
+            totalPay += ee;
+            totalFreight += (g);
+            totalDiscounts += (f);
 
-          //要输出时，四舍五入一下
-          f = this.priceForm(f); 
-          g = this.priceForm(g); 
-          ee = this.priceForm(ee); 
-          d = this.priceForm(d); 
-          var sPay = { 
-            "name": key, 
-            "goods": d,
-            "freight": g, 
-            "discounts": f, 
-            "pay": ee 
-            }
-          listDataTem.push(sPay)
+            //要输出时，四舍五入一下
+            f = this.priceForm(f); 
+            g = this.priceForm(g); 
+            ee = this.priceForm(ee); 
+            d = this.priceForm(d); 
+            var sPay = { 
+              "name": key, 
+              "goods": d,
+              "freight": g, 
+              "discounts": f, 
+              "pay": ee 
+              }
+            listDataTem.push(sPay)
+          }
         }else{  //记录名字
           if(key.indexOf("name_") != -1){
             var name = e.detail.value[key]; //名字
@@ -214,7 +230,44 @@ Page({
         listData: listDataTem,
         tabelShowFlag: flag
       })
+      
+      this.setAnimation()
     }
+  },
+
+  //动画
+  setAnimation: function (){
+    var animation = wx.createAnimation({
+      timingFunction: 'ease',
+    })
+    animation.scale(0.5, 0.5).step({ duration: 1 })
+    animation.scale(1, 1).step({ duration: 400 })
+
+    var animationMask = wx.createAnimation({
+      timingFunction: 'ease',
+    })
+    animationMask.opacity(0.8).step({ duration: 400 })
+
+    this.setData({
+      maskAnimationData: animationMask.export(),
+      animationData: animation.export()
+    })
+  },
+  fadeAnimation: function () {
+    var animation = wx.createAnimation({
+      timingFunction: 'ease',
+    })
+    animation.opacity(0.3).scale(0.01, 0.01).step({ duration: 300 })
+
+    var animationMask = wx.createAnimation({
+      timingFunction: 'ease',
+    })
+    animationMask.opacity(0).step({ duration: 300 })
+    
+    this.setData({
+      animationData: animation.export(),
+      maskAnimationData: animationMask.export()
+    })
   },
 
   //重置
@@ -235,7 +288,7 @@ Page({
 
   //确认键
   onConfirm: function () {
-    this.hideModal()
+    this.delayHideModal()
   },
 
   /**
@@ -243,11 +296,20 @@ Page({
   */
   hideModal: function () {
     this.setData({
-      tabelShowFlag: false
-    });
+      tabelShowFlag: false,
+      animationData: {},
+      maskAnimationData: {}
+    })
+  },
+  delayHideModal: function(){
+    var that = this;
+    that.fadeAnimation()
+    setTimeout(function () {
+      that.hideModal()
+    }, 280)
   },
   /**
-  * 弹出框蒙层截断touchmove事件,但是模态本身能滚动时，此方法无效
+  * 弹出框蒙层截断touchmove事件
   */
   preventTouchMove: function () {
     return;

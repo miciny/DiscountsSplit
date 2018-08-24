@@ -3,6 +3,7 @@
 .userinfo {
   display: flex;
   margin-left: 15px;
+  margin-top: 5px;
   flex-direction: row;
   align-items: center;
   width: 100%;
@@ -95,7 +96,6 @@
 }
 
 .inputAll-input {
-  color: #888;
   margin-left: 5px;
   margin-right: 6px;
   margin-top: 4px;
@@ -135,6 +135,10 @@
   background-color: #66CDAA;
 }
 
+.takeHeight{
+  height: 15px;
+}
+
 .table {
   border: 0px solid darkgray;
   width: 100%;
@@ -153,6 +157,7 @@
   width: 100%;
   justify-content: center;
   text-align: center;
+  color: black;
 }
 
 .bg-title {
@@ -191,21 +196,21 @@
   position: fixed;
   top: 0;
   left: 0;
-  background: #000;
-  opacity: 0.9;
+  background: rgb(37, 37, 37);
+  opacity: 0;
   z-index: 1000;
-  color: #fff;
   overflow-y: hidden;
 }
 
 .modal-dialog {
   width: 98%;
-  overflow: hidden;
+  overflow-y: hidden;
   position: fixed;
   top: 20%;
   left: 0;
   z-index: 9999;
   background: #f9f9f9;
+  opacity: 1;
   margin-left: 1%;
   border-radius: 36rpx;
 }
@@ -220,6 +225,7 @@
 
 .td-totle{
   color: red;
+  font-weight: bold;
 }
 
 .modal-footer {

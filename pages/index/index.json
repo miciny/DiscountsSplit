@@ -1,6 +1,3 @@
 {
-  "window":{
-    "backgroundColor": "#FFFAF0",
-    "scroll-x": "false"
-  }
+  "disableScroll": true
 }

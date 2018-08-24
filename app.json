@@ -5,9 +5,8 @@
   ],
   "window":{
     "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#FAFAE0",
+    "navigationBarBackgroundColor": "#FAFAF0",
     "navigationBarTitleText": "优惠拆分",
-    "navigationBarTextStyle":"black",
-    "scroll-x": "false"
+    "navigationBarTextStyle":"black"
   }
 }
