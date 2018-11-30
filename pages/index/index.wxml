@@ -1,99 +1,171 @@
 <!--index.wxml-->
-<scroll-view class="container" scroll-y style="height:{{scrollHeight}}px;">
+<view class='container'>
+    <scroll-view class="container_root" scroll-y style="height:{{scrollHeight}}px;">
+        <!--头像-->
+        <view class="userinfo">
+            <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="onGotUserInfo" class="userInfoGetBtn"> 获取头像昵称 </button>
+            <block wx:else>
+                <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+                <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+            </block>
 
-  <!--头像-->
-  <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="onGotUserInfo" class="userInfoGetBtn"> 获取头像昵称 </button>
-    <block wx:else>
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
-
-    <button class="resetBtn" bindtap="resetData"> 清 空 </button>
-  </view>
-
-  <!--输入表格-->
-  <form bindsubmit="formSubmit" bindreset="formReset" class="inputForm">
-    <view class="section section-top">
-      <text class="inputAll-label-title">{{inputAll.goodsAllTitle}}</text>
-    </view>
-
-    <view class="section">
-      <view class="inputAll-label">{{inputAll.discountsAll}}</view>
-      <input class="inputAll-input" name="discountsAll" placeholder='0.00' value='{{resetNull}}' type='digit' focus="{{focus}}" />
-    </view>
-
-    <view class="section">
-      <view class="inputAll-label">{{inputAll.freightAll}}</view>
-      <input class="inputAll-input" name="freightAll" placeholder='0.00' value='{{resetNull}}' type='digit' />
-    </view>
-
-    <view class="section">
-      <view class="inputAll-must-label">*</view>
-      <text class="inputAll-label">{{inputAll.personNo}}</text>
-      <picker bindchange="bindPickerChange" value="{{personNm}}" range="{{array}}">
-        <view class="picker">
-          {{array[personNm]}}人
+            <!--清空按钮-->
+            <button class="resetBtn" bindtap="resetData"> 清 空 </button>
         </view>
-      </picker>
+
+
+        <!--选择模式按钮-->
+        <view class='choose'>
+            <button class="chooseBtn" bindtap="setModel" id="1" style="color: {{chooseColor_one}};"> 商品模式 </button>
+            <button class="chooseBtn" bindtap="setModel" id="0" style="color: {{chooseColor_zero}};"> 人均模式 </button>
+        </view>
+
+        <!--输入表格-->
+        <form bindsubmit="formSubmit" bindreset="formReset" class="inputForm">
+            <view class="section section-top">
+                <text class="inputAll-label-title">{{inputAll.goodsAllTitle}}</text>
+            </view>
+
+            <view class="section">
+                <view class="inputAll-label">{{inputAll.discountsAll}}</view>
+                <input class="inputAll-input" name="discountsAll" placeholder='0.00' value='{{resetNull}}' type='digit' focus="{{focus}}" />
+            </view>
+
+            <view class="section">
+                <view class="inputAll-label">{{inputAll.freightAll}}</view>
+                <input class="inputAll-input" name="freightAll" placeholder='0.00' value='{{resetNull}}' type='digit' />
+            </view>
+
+            <view class="section">
+                <view class="inputAll-must-label">*</view>
+
+                <text class="inputAll-label">
+          <block wx:if="{{calculateMode == 0}}">{{inputAll.personNo}}</block>
+          <block wx:if="{{calculateMode == 1}}">{{inputAll.goodsNo}}</block>
+        </text>
+
+                <picker bindchange="bindPickerChange" value="{{personNm}}" range="{{array}}">
+                    <view class="picker">
+                        <block wx:if="{{calculateMode == 0}}">{{array[personNm]}}人</block>
+                        <block wx:if="{{calculateMode == 1}}">{{array[personNm]}}件</block>
+                    </view>
+                </picker>
+            </view>
+
+            <!--循环显示输入栏-->
+            <view class="section" wx:for="{{array[personNm]}}" wx:key="*this">
+                <input class="inputAll-name-input" name="name_{{arrayA[index]}}" placeholder='{{arrayA[index]}}{{inputAll.aGoodsAll}}' value='{{resetNull}}'></input>
+
+                <input class="inputAll-input" name="{{arrayA[index]}}" placeholder='0.00(总)' type='digit' value='{{resetNull}}'></input>
+
+                <!--如果为商品模式，显示数量栏-->
+                <block wx:if="{{calculateMode == 1}}">
+                    <text class="inputAll-label inputAll-label-goodstitle">数量: </text>
+                    <input class="inputAll-input-goodsNo" name="GoodsNo_{{arrayA[index]}}" placeholder='1' type='number' value='{{reset_One}}'></input>
+                </block>
+            </view>
+
+            <view class="calculateView">
+                <button class="calculateBtn" formType="submit">计\t算</button>
+            </view>
+
+            <view class='takeHeight' style='height: {{copyrightHeight}}px'></view>
+            <view class='copyrightView'>
+                <text class='copyright'>©2018 Caiyuan Mao. All Rights Reserved</text>
+            </view>
+        </form>
+    </scroll-view>
+
+    <!--弹窗-->
+    <view class="modal-mask" bindtap="delayHideModal" animation="{{maskAnimationData}}" wx:if="{{tabelShowFlag}}" catchtouchmove="preventTouchMove">
     </view>
 
-    <view class="section" wx:for="{{array[personNm]}}" wx:key="*this">
-      <input class="inputAll-name-input" name="name_{{arrayA[index]}}" placeholder='{{arrayA[index]}}{{inputAll.aGoodsAll}}' value='{{resetNull}}'></input>
-      <input class="inputAll-input" name="{{arrayA[index]}}" placeholder='0.00' type='digit' value='{{resetNull}}'></input>
+    <!--输出结果-->
+    <view class='modal-dialog-upview' wx:if="{{tabelShowFlag}}">
+        <view class="modal-dialog" catchtouchmove="preventTouchMove" animation="{{animationData}}">
+            <view class="modal-content">
+                <view class="table">
+                    <view class="tr bg-title">
+
+                        <!--如果为商品模式，显示数量栏-->
+                        <block wx:if="{{calculateMode == 1}}">
+                            <view class="th ">商品</view>
+                        </block>
+                        <block wx:if="{{calculateMode == 0}}">
+                            <view class="th ">人员</view>
+                        </block>
+
+                        <view class="th ">总额</view>
+                        <view class="th ">分摊优惠</view>
+                        <view class="th">分摊运费</view>
+
+                        <block wx:if="{{calculateMode == 0}}">
+                            <view class="th ">应付</view>
+                        </block>
+
+                        <block wx:if="{{calculateMode == 1}}">
+                            <view class="th ">数量</view>
+                            <view class="th ">单价</view>
+                        </block>
+
+                    </view>
+                    <scroll-view class='modal-dialog-scroll' scroll-y style="height: {{listData.length<=10 ? listData.length*2 : 22}}rem;">
+                        <block wx:for="{{listData}}" wx:key="{{code}}">
+                            <view class="tr bg-t" wx:if="{{index == listData.length-1}}">
+                                <view class="td td-totle">{{item.name}}</view>
+                                <view class="td td-totle">{{item.goods}}</view>
+                                <view class="td td-totle">{{item.discounts}}</view>
+                                <view class="td td-totle">{{item.freight}}</view>
+
+                                <block wx:if="{{calculateMode == 0}}">
+                                    <view class="td td-totle">{{item.pay}}</view>
+                                </block>
+
+                                <block wx:if="{{calculateMode == 1}}">
+                                    <view class="td td-totle">{{item.goodsNo}}</view>
+                                    <view class="td td-totle">{{item.goodsSingle}}</view>
+                                </block>
+
+                            </view>
+                            <view class="tr bg-g" wx:elif="{{index % 2 == 0}}">
+                                <view class="td td-name">{{item.name}}</view>
+                                <view class="td">{{item.goods}}</view>
+                                <view class="td">{{item.discounts}}</view>
+                                <view class="td">{{item.freight}}</view>
+
+                                <block wx:if="{{calculateMode == 0}}">
+                                    <view class="td">{{item.pay}}</view>
+                                </block>
+
+                                <block wx:if="{{calculateMode == 1}}">
+                                    <view class="td">{{item.goodsNo}}</view>
+                                    <view class="td">{{item.goodsSingle}}</view>
+                                </block>
+
+                            </view>
+                            <view class="tr bg-w" wx:else>
+                                <view class="td td-name">{{item.name}}</view>
+                                <view class="td">{{item.goods}}</view>
+                                <view class="td">{{item.discounts}}</view>
+                                <view class="td">{{item.freight}}</view>
+
+                                <block wx:if="{{calculateMode == 0}}">
+                                    <view class="td">{{item.pay}}</view>
+                                </block>
+
+                                <block wx:if="{{calculateMode == 1}}">
+                                    <view class="td">{{item.goodsNo}}</view>
+                                    <view class="td">{{item.goodsSingle}}</view>
+                                </block>
+
+                            </view>
+                        </block>
+                    </scroll-view>
+                </view>
+            </view>
+            <view class="modal-footer">
+                <view class="btn-confirm" bindtap="onConfirm" data-status="confirm">确定</view>
+            </view>
+        </view>
     </view>
-
-    <view class="calculateView">
-      <button class="calculateBtn" formType="submit">计\t算</button>
-    </view>
-    <view class='takeHeight'></view>
-  </form>
-
-</scroll-view>
-
-<!--弹窗-->
-<view class="modal-mask" bindtap="delayHideModal" animation="{{maskAnimationData}}" wx:if="{{tabelShowFlag}}" catchtouchmove="preventTouchMove">
-</view>
-
-<!--输出结果-->
-<view class="modal-dialog" animation="{{animationData}}" wx:if="{{tabelShowFlag}}">
-  <view class="modal-content">
-    <view class="table" wx:if="{{tabelShowFlag}}">
-      <view class="tr bg-title">
-        <view class="th">参与人员</view>
-        <view class="th ">商品总额</view>
-        <view class="th ">分摊优惠</view>
-        <view class="th">分摊运费</view>
-        <view class="th ">应付金额</view>
-      </view>
-      <scroll-view scroll-y style="height: 250px;">
-        <block wx:for="{{listData}}" wx:key="{{code}}">
-          <view class="tr bg-t" wx:if="{{index == listData.length-1}}">
-            <view class="td td-totle">{{item.name}}</view>
-            <view class="td td-totle">{{item.goods}}</view>
-            <view class="td td-totle">{{item.discounts}}</view>
-            <view class="td td-totle">{{item.freight}}</view>
-            <view class="td td-totle">{{item.pay}}</view>
-          </view>
-          <view class="tr bg-g" wx:elif="{{index % 2 == 0}}">
-            <view class="td td-name">{{item.name}}</view>
-            <view class="td">{{item.goods}}</view>
-            <view class="td">{{item.discounts}}</view>
-            <view class="td">{{item.freight}}</view>
-            <view class="td">{{item.pay}}</view>
-          </view>
-          <view class="tr bg-w" wx:else>
-            <view class="td td-name">{{item.name}}</view>
-            <view class="td">{{item.goods}}</view>
-            <view class="td">{{item.discounts}}</view>
-            <view class="td">{{item.freight}}</view>
-            <view class="td">{{item.pay}}</view>
-          </view>
-        </block>
-      </scroll-view>
-    </view>
-  </view>
-  <view class="modal-footer">
-    <view class="btn-confirm" bindtap="onConfirm" data-status="confirm">确定</view>
-  </view>
 </view>

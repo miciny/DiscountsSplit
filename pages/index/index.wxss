@@ -1,248 +1,322 @@
 /**index.wxss**/
 
+.container_root {
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    overflow: hidden;
+    position: fixed;
+    z-index: 0;
+    white-space: nowrap;
+    background-color: white;
+}
+
 .userinfo {
-  display: flex;
-  margin-left: 15px;
-  margin-top: 5px;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  height: 90rpx;
+    display: flex;
+    margin-left: 15px;
+    margin-top: 5px;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 45px;
 }
 
 .userinfo-avatar {
-  width: 70rpx;
-  height: 70rpx;
-  margin: 10rpx;
-  border-radius: 50%;
+    width: 70rpx;
+    height: 70rpx;
+    margin: 10rpx;
+    border-radius: 50%;
 }
 
 .userinfo-nickname {
-  color: #aaa;
-  margin-left: 10px;
+    color: #aaa;
+    margin-left: 10px;
 }
 
 .userInfoGetBtn {
-  margin-left: 5px;
-  font-size: 30rpx;
-  float: left;
+    margin-left: 5px;
+    font-size: 30rpx;
+    float: left;
 }
 
 .resetBtn {
-  margin-right: 30px;
-  font-size: 30rpx;
-  height: 70rpx;
-  float: right;
-  background-color: #43CD80;
+    margin-right: 30px;
+    font-size: 30rpx;
+    height: 70rpx;
+    float: right;
+    background-color: #66cdaa;
 }
 
 .inputForm {
-  width: 100%;
+    width: 100%;
+}
+
+.choose {
+    border-top-style: solid;
+    border-top-width: 8px;
+    border-color: rgba(231, 224, 224, 0.8);
+    height: 50px;
+    flex-direction: row;
+    vertical-align: middle;
+}
+
+.chooseBtn {
+    width: 30%;
+    text-align: center;
+    border-radius: 5px;
+    position: relative;
+    vertical-align: middle;
+    margin-left: 10px;
+    margin-top: 8px;
+    font-size: 17px;
+    height: 40px;
+    float: left;
 }
 
 .section {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 30px;
-  vertical-align: middle;
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(231, 224, 224, 0.8);
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  line-height: 100%;
-  list-style: none;
-  padding: 5px 5px;
-  margin-bottom: 0px;
-}
-.section-top{
-  border-top-style: solid;
-  border-top-width: 8px;
-  height: 40px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 30px;
+    vertical-align: middle;
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(231, 224, 224, 0.8);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    line-height: 100%;
+    list-style: none;
+    padding: 5px 5px;
+    margin-bottom: 0px;
 }
 
-.inputAll-must-label{
-  font-size: 30rpx;
-  width: 10px;
-  margin-right: -10px;
-  margin-top: 10px;
-  height: 7px;
-  color: red;
+.section-top {
+    height: 40px;
 }
+
+.inputAll-must-label {
+    font-size: 30rpx;
+    width: 10px;
+    margin-right: -10px;
+    margin-top: 10px;
+    height: 7px;
+    color: red;
+}
+
 .inputAll-label-title {
-  font-size: 24rpx;
-  margin-left: 5px;
-  margin-top: 3px;
-  padding: 1px 1px 1px 2px;
-  color: grey;
+    font-size: 24rpx;
+    margin-left: 5px;
+    margin-top: 3px;
+    padding: 1px 1px 1px 2px;
+    color: grey;
 }
 
 .inputAll-label {
-  font-size: 30rpx;
-  width: 180rpx;
-  margin-left: 10px;
-  margin-top: 8px;
-  height: 7px;
-  padding: 1px 1px 1px 2px;
-  color: black;
+    font-size: 30rpx;
+    width: 180rpx;
+    margin-left: 10px;
+    margin-top: 8px;
+    height: 7px;
+    padding: 1px 1px 1px 2px;
+    color: black;
 }
 
-.inputAll-name-input{
-  font-size: 30rpx;
-  width: 180rpx;
-  margin-left: 10px;
-  margin-top: 2px;
-  padding: 1px 1px 1px 3px;
+.inputAll-label-goodstitle {
+    width: 30rpx;
+}
+
+.inputAll-name-input {
+    font-size: 30rpx;
+    width: 180rpx;
+    margin-left: 10px;
+    margin-top: 2px;
+    padding: 1px 1px 1px 3px;
 }
 
 .inputAll-input {
-  margin-left: 5px;
-  margin-right: 6px;
-  margin-top: 4px;
-  outline: 0 none;
-  padding: 1px 1px 1px 5px;
-  width: 60%;
-  font-size: 30rpx;
-  line-height: 15px;
+    margin-left: 0px;
+    margin-right: 6px;
+    margin-top: 4px;
+    outline: 0 none;
+    padding: 1px 1px 1px 5px;
+    width: 180rpx;
+    font-size: 30rpx;
+    line-height: 15px;
+}
+
+.inputAll-input-goodsNo {
+    margin-left: 30px;
+    margin-top: 4px;
+    outline: 0 none;
+    padding: 1px 1px 1px 5px;
+    width: 70rpx;
+    font-size: 30rpx;
+    line-height: 15px;
+    border-style: solid;
+    border-radius: 4px;
+    border-width: 1px;
+    border-color: darkgray;
 }
 
 .picker {
-  padding-left: 12px;
-  font-size: 32rpx;
-  margin-top: 8px;
-  height: 7px;
-  color: darkgreen;
-  text-decoration: underline;
-  font-weight: bold;
+    padding-left: 8px;
+    font-size: 32rpx;
+    margin-top: 8px;
+    height: 7px;
+    color: darkgreen;
+    text-decoration: underline;
+    font-weight: bold;
 }
 
 .calculateView {
-  margin-top: 25rpx;
-  width: 100%;
-  align-content: center;
-  align-items: center;
+    margin-top: 25rpx;
+    width: 100%;
+    align-content: center;
+    align-items: center;
 }
 
 .calculateBtn {
-  width: 40%;
-  line-height: 38px;
-  text-align: center;
-  color: #000;
-  text-shadow: 1px 1px 1px #999;
-  border-radius: 5px;
-  position: relative;
-  overflow: hidden;
-  background-color: #66CDAA;
-}
-
-.takeHeight{
-  height: 15px;
+    width: 40%;
+    line-height: 38px;
+    text-align: center;
+    color: #000;
+    text-shadow: 1px 1px 1px #999;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    background-color: #66cdaa;
 }
 
 .table {
-  border: 0px solid darkgray;
-  width: 100%;
-  margin-top: 0px;
+    border: 0px solid darkgray;
+    width: 100%;
+    margin-top: 0px;
 }
 
 .tr {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  height: 2rem;
-  align-items: center;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    height: 2rem;
+    align-items: center;
 }
 
 .td {
-  width: 100%;
-  justify-content: center;
-  text-align: center;
-  color: black;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    color: black;
 }
 
 .bg-title {
-  background: snow;
-  font-size: 30rpx;
+    background: snow;
+    font-size: 30rpx;
 }
 
 .bg-g {
-  background: #e6f3f9;
-  font-size: 30rpx;
+    background: #e6f3f9;
+    font-size: 30rpx;
 }
 
 .bg-w {
-  background: lightgray;
-  font-size: 30rpx;
+    background: lightgray;
+    font-size: 30rpx;
 }
 
 .bg-t {
-  background: rgb(248, 243, 243);
-  font-size: 30rpx;
+    background: rgb(248, 243, 243);
+    font-size: 30rpx;
 }
 
 .th {
-  width: 100%;
-  justify-content: center;
-  background: darkgray;
-  color: #fff;
-  display: flex;
-  height: 2rem;
-  align-items: center;
+    width: 100%;
+    justify-content: center;
+    background: darkgray;
+    color: #fff;
+    display: flex;
+    height: 2rem;
+    align-items: center;
 }
 
 .modal-mask {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: rgb(37, 37, 37);
-  opacity: 0;
-  z-index: 1000;
-  overflow-y: hidden;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(37, 37, 37);
+    opacity: 0;
+    z-index: 1000;
+    overflow: hidden;
 }
 
 .modal-dialog {
-  width: 98%;
-  overflow-y: hidden;
-  position: fixed;
-  top: 20%;
-  left: 0;
-  z-index: 9999;
-  background: #f9f9f9;
-  opacity: 1;
-  margin-left: 1%;
-  border-radius: 36rpx;
+    width: 100%;
+    overflow: hidden;
+    left: 0;
+    z-index: 9999;
+    background: #f9f9f9;
+    opacity: 1;
+    border-radius: 36rpx;
+}
+
+.modal-dialog-upview {
+    width: 98%;
+    height: 100%;
+    margin-left: 1%;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+.modal-dialog-scroll {
+    white-space: nowrap;
 }
 
 .modal-content {
-  padding: 0rpx 0rpx;
+    padding: 0rpx 0rpx;
 }
 
 .td-name {
-  color: chocolate;
+    color: chocolate;
 }
 
-.td-totle{
-  color: red;
-  font-weight: bold;
+.td-totle {
+    color: red;
+    font-weight: bold;
 }
 
 .modal-footer {
-  display: flex;
-  flex-direction: row;
-  height: 86rpx;
-  border-top: 1px solid #dedede;
-  font-size: 34rpx;
-  line-height: 86rpx;
+    display: flex;
+    flex-direction: row;
+    height: 86rpx;
+    border-top: 1px solid #dedede;
+    font-size: 34rpx;
+    line-height: 86rpx;
 }
 
 .btn-confirm {
-  width: 100%;
-  height: 100%;
-  font-size: 35rpx;
-  color: #000;
-  text-align: center;
-  border-style: none;
-  border-color: white;
+    width: 100%;
+    height: 100%;
+    font-size: 35rpx;
+    color: #000;
+    text-align: center;
+    border-style: none;
+    border-color: white;
+}
+
+.copyright {
+    font-size: 25rpx;
+    color: darkgray;
+    width: 100%;
+    text-align: center;
+}
+
+.copyrightView {
+    height: 15px;
+    text-align: center;
 }

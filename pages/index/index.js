@@ -3,315 +3,402 @@
 const app = getApp()
 
 Page({
-  //数据
-  data: {
-    //输入框前的文案
-    inputAll: { 
-      goodsAllTitle: '人员名称可修改\n选择人数，输入个人拼单金额，即可计算出每个人的分摊金额', 
-      discountsAll: '优\xa0惠\xa0金\xa0额\xa0:',
-      freightAll: '总\xa0\xa0\xa0运\xa0\xa0\xa0费\xa0:',
-      aGoodsAll: '(可修改)\xa0\xa0\xa0:',
-      personNo: '总\xa0\xa0\xa0人\xa0\xa0\xa0数\xa0:',
-    }, 
+    //数据
+    data: {
+        //输入框前的文案
+        inputAll: {
+            goodsAllTitle: '选择计算模式，确认人数或者件数，输入金额、数量\n即可计算出每个人或每件商品分摊优惠之后的金额',
+            discountsAll: '优\xa0惠\xa0金\xa0额\xa0:',
+            freightAll: '总\xa0\xa0\xa0运\xa0\xa0\xa0费\xa0:',
+            aGoodsAll: '(可修改)\xa0\xa0\xa0:',
+            personNo: '总\xa0\xa0\xa0人\xa0\xa0\xa0数\xa0:',
+            goodsNo: '总\xa0商\xa0品\xa0数\xa0:',
+        },
 
-    listData: [], //结果展示数据，【“A”：“22.20”】
-    tabelShowFlag: false, //结果展示的table是否显示
-    personNm: 0, //选择的人数的底标
-    array: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], //选择的人数
-    arrayA: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'], //选择的人数对应的字母
-    focus: false, //第一个框是否聚焦
+        listData: [], //结果展示数据，【“A”：“22.20”】
+        tabelShowFlag: false, //结果展示的table是否显示
+        personNm: 0, //选择的人数的底标
+        array: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], //选择的人数
+        arrayA: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'], //选择的人数对应的字母
+        focus: false, //第一个框是否聚焦
 
-    resetNull: "", //清空时，给输入框的赋值
-    scrollHeight:"", //页面滚动高度赋值
-    animationData: {}, //动画
-    maskAnimationData: {},
+        calculateMode: 1,
+        chooseColor_zero: "black",
+        chooseColor_one: "rgb(17, 209, 10)",
 
-    userInfo: {}, //用户信息
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
-  },
+        resetNull: "", //清空时，给输入框的赋值
+        reset_One: 1, //清空时，给输入框的赋值
+        scrollHeight: "", //页面滚动高度赋值
+        animationData: {}, //动画
+        maskAnimationData: {},
+        copyrightHeight: "",
 
-  //事件处理函数
-  onLoad: function () {
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true,
-        focus: true
-      })
-    } else if (this.data.canIUse){
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
+        userInfo: {}, //用户信息
+        hasUserInfo: false,
+        canIUse: wx.canIUse('button.open-type.getUserInfo')
+    },
+
+    //事件处理函数
+    onLoad: function() {
+        if (app.globalData.userInfo) {
+            this.setData({
+                userInfo: app.globalData.userInfo,
+                hasUserInfo: true,
+                focus: true
+            })
+        } else if (this.data.canIUse) {
+            // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+            // 所以此处加入 callback 以防止这种情况
+            app.userInfoReadyCallback = res => {
+                this.setData({
+                    userInfo: res.userInfo,
+                    hasUserInfo: true,
+                    focus: true
+                })
+            }
+        } else {
+            // 在没有 open-type=getUserInfo 版本的兼容处理
+            wx.getUserInfo({
+                success: res => {
+                    app.globalData.userInfo = res.userInfo
+                    this.setData({
+                        userInfo: res.userInfo,
+                        hasUserInfo: true,
+                        focus: true
+                    })
+                }
+            })
+        }
+        //获取屏幕高度，用于滚动scroll设置高度用
+        wx.getSystemInfo({
+            success: res => {
+                this.setData({
+                    scrollHeight: parseInt(res.windowHeight),
+                    copyrightHeight: parseInt(res.windowHeight) - 440
+                })
+            }
+        });
+    },
+
+    //获取用户信息
+    onGotUserInfo: function(e) {
+        app.globalData.userInfo = e.detail.userInfo
         this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true,
-          focus: true
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
+            userInfo: e.detail.userInfo,
             hasUserInfo: true,
             focus: true
-          })
-        }
-      })
-    }
-    //获取屏幕高度，用于滚动scroll设置高度用
-    wx.getSystemInfo({
-      success: res => {
-        this.setData({
-          scrollHeight: parseInt(res.windowHeight)
         })
-      }
-    });
-  },
+    },
 
-  //获取用户信息
-  onGotUserInfo: function(e) {
-    app.globalData.userInfo = e.detail.userInfo
-    this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true,
-      focus: true
-    })
-  },
+    //选择人数
+    bindPickerChange: function(e) {
+        var copyheight = this.data.scrollHeight - 440 - 41 * e.detail.value
+        if (copyheight < 20) {
+            copyheight = 20
+        };
 
-  //选择人数
-  bindPickerChange: function (e) {
-    this.setData({
-      personNm: e.detail.value,
-      listData: [],
-      tabelShowFlag: false
-    })
-  },
+        this.setData({
+            personNm: e.detail.value,
+            listData: [],
+            tabelShowFlag: false,
+            copyrightHeight: copyheight
+        })
+    },
 
-  //检查元素是否在数组中
-  isInArray3: function (arr, value) {
-    if (arr.indexOf && typeof (arr.indexOf) == 'function') {
-      var index = arr.indexOf(value);
-      if (index >= 0) {
-        return true;
-      }
-    }
-    return false;
-  },
+    //选择模式
+    setModel: function(e) {
 
-  //价格保留两位，传入Float，返回String，保留两位小数的
-  priceForm: function(price) {
-    price = price.toFixed(2)
-    return price
-  },
-  //取价格，传入String 返回float
-  getPrice: function (price) {
-    price = parseFloat(price)
-    if (isNaN(price)) { price = 0 };
-    price = price.toFixed(2);
-    price = parseFloat(price)
-    return price
-  },
+        if (e.currentTarget.id == 1) {
+            this.setData({
+                chooseColor_zero: "black",
+                chooseColor_one: "rgb(17, 209, 10)"
+            })
+        } else if (e.currentTarget.id == 0) {
+            this.setData({
+                chooseColor_one: "black",
+                chooseColor_zero: "rgb(17, 209, 10)"
+            })
+        }
 
-  //计算显示
-  formSubmit: function (e) {
-    var b = this.getPrice(e.detail.value['discountsAll']); //总优惠
-    var c = this.getPrice(e.detail.value['freightAll']); //总运费
+        this.setData({
+            calculateMode: e.currentTarget.id,
+            listData: [],
+            tabelShowFlag: false
+        })
+    },
 
-    //金额大于0的检测
-    if (c < 0 || b < 0){
-      wx.showModal({
-        title: '提示',
-        content: "数据有误,金额需大于0",
-        showCancel: false
-      })  
-      return
-    } else {
-      var totalGoods = 0; //记录总的商品金额（四舍五入之后的）
+    //检查元素是否在数组中
+    isInArray3: function(arr, value) {
+        if (arr.indexOf && typeof(arr.indexOf) == 'function') {
+            var index = arr.indexOf(value);
+            if (index >= 0) {
+                return true;
+            }
+        }
+        return false;
+    },
 
-      //先算出总金额
-      for (var key in e.detail.value) {
-        if (this.isInArray3(this.data.arrayA, key)) {
-          var d = this.getPrice(e.detail.value[key]); //每个人的金额
-          if ( d < 0 ){
+    //价格保留两位，传入Float，返回String，保留两位小数的
+    priceForm: function(price) {
+        price = price.toFixed(2)
+        return price
+    },
+    //取价格，传入String 返回float
+    getPrice: function(price) {
+        price = parseFloat(price)
+        if (isNaN(price)) {
+            price = 0
+        };
+        price = price.toFixed(2);
+        price = parseFloat(price)
+        return price
+    },
+
+    //计算显示
+    formSubmit: function(e) {
+        var b = this.getPrice(e.detail.value['discountsAll']); //总优惠
+        var c = this.getPrice(e.detail.value['freightAll']); //总运费
+
+        //金额大于0的检测
+        if (c < 0 || b < 0) {
             wx.showModal({
-              title: '提示',
-              content: "数据有误,金额需大于0",
-              showCancel: false
+                title: '提示',
+                content: "数据有误,金额需大于0",
+                showCancel: false
             })
             return
-          }
-          totalGoods += d;
-        }
-      }
+        } else {
+            var totalGoods = 0; //记录总的商品金额（四舍五入之后的）
 
-      //优惠小于商品金额
-      var ss = totalGoods - b + c;  //实付金额
-      if (b > totalGoods) {
-        wx.showModal({
-          title: '提示',
-          content: "数据有误: 优惠金额大于商品总金额",
-          showCancel: false
-        })
-        return
-      }else if(totalGoods <= 0){
-        wx.showModal({
-          title: '提示',
-          content: "数据有误: 请输入金额",
-          showCancel: false
-        })
-        return
-      }
+            //先算出总金额
+            for (var key in e.detail.value) {
+                if (this.isInArray3(this.data.arrayA, key)) {
+                    var d = this.getPrice(e.detail.value[key]); //每个人的金额
+                    if (d < 0) {
+                        wx.showModal({
+                            title: '提示',
+                            content: "数据有误,金额需大于0",
+                            showCancel: false
+                        })
+                        return
+                    }
+                    totalGoods += d;
+                }
+            }
 
-      //金额无误，继续计算
-      var listDataTem = [];
-      var nameListData = new Array();; //名字和字母的对应关系
-      var totalFreight = 0; //记录每个人的运费金额（四舍五入之后的）
-      var totalDiscounts = 0; //记录每个人的优惠金额（四舍五入之后的）
-      var totalPay = 0; //记录每个人的商品金额，计算的总应付金额，防止金额对不上
-      var flag = false; //是否显示结果
+            //优惠小于商品金额
+            var ss = totalGoods - b + c; //实付金额
+            if (b > totalGoods) {
+                wx.showModal({
+                    title: '提示',
+                    content: "数据有误: 优惠金额大于商品总金额",
+                    showCancel: false
+                })
+                return
+            } else if (totalGoods <= 0) {
+                wx.showModal({
+                    title: '提示',
+                    content: "数据有误: 请输入金额",
+                    showCancel: false
+                })
+                return
+            }
 
-      for (var key in e.detail.value) {
-        if (this.isInArray3(this.data.arrayA, key)) {
-          var d = this.getPrice(e.detail.value[key]); //每个人的金额
-          if (d > 0 ){  //小于等于0的不显示结果
-            var f = d / totalGoods * b; //优惠分摊
-            var g = d / totalGoods * c; //运费分摊
-            var ee = d - f + g; //应付金额
+            //金额无误，继续计算
+            var listDataTem = [];
+            var nameListData = new Array(); //名字和字母的对应关系
+            var totalFreight = 0; //记录每个人的运费金额（四舍五入之后的）
+            var totalDiscounts = 0; //记录每个人的优惠金额（四舍五入之后的）
+            var totalPay = 0; //记录每个人的商品金额，计算的总应付金额，防止金额对不上
+            var flag = false; //是否显示结果
 
-            totalPay += ee;
-            totalFreight += (g);
-            totalDiscounts += (f);
+            var goodsNoData = new Array(); //记录商品件数
+            var totalGoodsNo = 0;
 
-            //要输出时，四舍五入一下
-            f = this.priceForm(f); 
-            g = this.priceForm(g); 
-            ee = this.priceForm(ee); 
-            d = this.priceForm(d); 
-            var sPay = { 
-              "name": key, 
-              "goods": d,
-              "freight": g, 
-              "discounts": f, 
-              "pay": ee 
-              }
+            for (var key in e.detail.value) {
+                if (this.isInArray3(this.data.arrayA, key)) {
+                    var d = this.getPrice(e.detail.value[key]); //每个人的金额
+                    if (d > 0) { //小于等于0的不显示结果
+                        var f = d / totalGoods * b; //优惠分摊
+                        var g = d / totalGoods * c; //运费分摊
+                        var ee = d - f + g; //应付金额
+
+                        totalPay += ee;
+                        totalFreight += (g);
+                        totalDiscounts += (f);
+
+                        //要输出时，四舍五入一下
+                        f = this.priceForm(f);
+                        g = this.priceForm(g);
+                        ee = this.priceForm(ee);
+                        d = this.priceForm(d);
+                        var sPay = {
+                            "name": key,
+                            "goods": d,
+                            "freight": g,
+                            "discounts": f,
+                            "pay": ee,
+                            "goodsNo": 1,
+                            "goodsSingle": 0
+                        }
+                        listDataTem.push(sPay)
+                    }
+                } else { //记录名字
+                    if (key.indexOf("name_") != -1) {
+                        var name = e.detail.value[key]; //名字
+                        var nameA = key.slice(5);
+                        if (name == "") {
+                            name = nameA
+                        }; //如果为空
+                        nameListData[nameA] = name;
+                    }
+
+                    //如果商品模式
+                    if (this.data.calculateMode == 1) {
+                        if (key.indexOf("GoodsNo_") != -1) {
+                            var no = e.detail.value[key]; //件数
+                            var nameA = key.slice(8);
+                            if (isNaN(parseInt(no)) || no == "") {
+                                no = 1
+                            }; //如果为空
+                            goodsNoData[nameA] = no;
+                        }
+                    }
+                }
+            }
+
+            //处理名字问题
+            for (var item in listDataTem) {
+                var nameA = listDataTem[item].name;
+                var name = nameListData[nameA];
+                listDataTem[item].name = name;
+
+                //如果商品模式
+                if (this.data.calculateMode == 1) {
+                    var no = goodsNoData[nameA];
+                    listDataTem[item].goodsNo = no;
+                    listDataTem[item].goodsSingle = this.priceForm(parseFloat(listDataTem[item].pay) / parseFloat(no));
+                    totalGoodsNo += parseInt(no);
+                }
+            }
+
+            // 要显示，处理下小数
+            var totalGoodsForm = this.priceForm(totalGoods);
+            totalPay = this.priceForm(totalPay);
+            totalFreight = this.priceForm(totalFreight);
+            totalDiscounts = this.priceForm(totalDiscounts);
+            var sPay = {
+                "name": "总计",
+                "goods": totalGoodsForm,
+                "freight": totalFreight,
+                "discounts": totalDiscounts,
+                "pay": totalPay,
+                "goodsNo": totalGoodsNo,
+                "goodsSingle": totalPay
+            }
             listDataTem.push(sPay)
-          }
-        }else{  //记录名字
-          if(key.indexOf("name_") != -1){
-            var name = e.detail.value[key]; //名字
-            var nameA = key.slice(5);
-            if(name == ""){name = nameA};  //如果为空
-            nameListData[nameA] = name;
-          }
+            flag = true
+
+            this.setData({
+                listData: listDataTem,
+                tabelShowFlag: flag
+            })
+
+            this.setAnimation()
         }
-      }
+    },
 
-      //处理名字问题
-      for (var item in listDataTem){
-        var nameA = listDataTem[item].name;
-        var name = nameListData[nameA];
-        listDataTem[item].name = name;
-      }
+    //动画
+    setAnimation: function() {
+        var animation = wx.createAnimation({
+            timingFunction: 'ease',
+        })
+        animation.scale(0.01, 0.01).step({
+            duration: 1
+        })
+        animation.scale(1, 1).step({
+            duration: 400
+        })
 
-      // 要显示，处理下小数
-      var totalGoodsForm = this.priceForm(totalGoods);
-      totalPay = this.priceForm(totalPay);
-      totalFreight = this.priceForm(totalFreight);
-      totalDiscounts = this.priceForm(totalDiscounts);
-      var sPay = { "name": "总计", "goods": totalGoodsForm, "freight": totalFreight, "discounts": totalDiscounts, "pay": totalPay }
-      listDataTem.push(sPay)
-      flag = true
+        var animationMask = wx.createAnimation({
+            timingFunction: 'ease',
+        })
+        animationMask.opacity(0.8).step({
+            duration: 400
+        })
 
-      this.setData({
-        listData: listDataTem,
-        tabelShowFlag: flag
-      })
-      
-      this.setAnimation()
-    }
-  },
+        this.setData({
+            maskAnimationData: animationMask.export(),
+            animationData: animation.export()
+        })
+    },
+    fadeAnimation: function() {
+        var animation = wx.createAnimation({
+            timingFunction: 'ease',
+        })
+        animation.opacity(0.3).scale(0.01, 0.01).step({
+            duration: 300
+        })
 
-  //动画
-  setAnimation: function (){
-    var animation = wx.createAnimation({
-      timingFunction: 'ease',
-    })
-    animation.scale(0.5, 0.5).step({ duration: 1 })
-    animation.scale(1, 1).step({ duration: 400 })
+        var animationMask = wx.createAnimation({
+            timingFunction: 'ease',
+        })
+        animationMask.opacity(0).step({
+            duration: 300
+        })
 
-    var animationMask = wx.createAnimation({
-      timingFunction: 'ease',
-    })
-    animationMask.opacity(0.8).step({ duration: 400 })
+        this.setData({
+            animationData: animation.export(),
+            maskAnimationData: animationMask.export()
+        })
+    },
 
-    this.setData({
-      maskAnimationData: animationMask.export(),
-      animationData: animation.export()
-    })
-  },
-  fadeAnimation: function () {
-    var animation = wx.createAnimation({
-      timingFunction: 'ease',
-    })
-    animation.opacity(0.3).scale(0.01, 0.01).step({ duration: 300 })
+    //重置
+    resetData: function(e) {
+        this.setData({
+            personNm: 0,
+            resetNull: "",
+            reset_One: 1,
+            copyrightHeight: this.data.scrollHeight - 440
+        })
+    },
 
-    var animationMask = wx.createAnimation({
-      timingFunction: 'ease',
-    })
-    animationMask.opacity(0).step({ duration: 300 })
-    
-    this.setData({
-      animationData: animation.export(),
-      maskAnimationData: animationMask.export()
-    })
-  },
+    //分享app
+    onShareAppMessage: function(res) {
+        return {
+            title: '好用的拼单拆分计算小程序',
+            path: 'pages/index/index',
+            imageUrl: ''
+        }
+    },
 
-  //重置
-  resetData: function (e) {
-    this.setData({
-      personNm: 0,
-      resetNull: "",
-    })
-  },
+    //确认键
+    onConfirm: function() {
+        this.delayHideModal()
+    },
 
-  //分享app
-  onShareAppMessage: function (res) {
-    return {
-      title: '好用的拼单拆分计算小程序',
-      path: 'pages/index/index'
-    }
-  },
-
-  //确认键
-  onConfirm: function () {
-    this.delayHideModal()
-  },
-
-  /**
-  * 隐藏模态对话框
-  */
-  hideModal: function () {
-    this.setData({
-      tabelShowFlag: false,
-      animationData: {},
-      maskAnimationData: {}
-    })
-  },
-  delayHideModal: function(){
-    var that = this;
-    that.fadeAnimation()
-    setTimeout(function () {
-      that.hideModal()
-    }, 280)
-  },
-  /**
-  * 弹出框蒙层截断touchmove事件
-  */
-  preventTouchMove: function () {
-    return;
-  },
+    /**
+     * 隐藏模态对话框
+     */
+    hideModal: function() {
+        this.setData({
+            tabelShowFlag: false,
+            animationData: {},
+            maskAnimationData: {}
+        })
+    },
+    delayHideModal: function() {
+        var that = this;
+        that.fadeAnimation()
+        setTimeout(function() {
+            that.hideModal()
+        }, 280)
+    },
+    /**
+     * 弹出框蒙层截断touchmove事件
+     * 本身scrollview不能阻止，不能用这个方法
+     */
+    preventTouchMove: function() {
+        return;
+    },
 })
