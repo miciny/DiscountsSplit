@@ -7,12 +7,13 @@ Page({
     data: {
         //输入框前的文案
         inputAll: {
-            goodsAllTitle: '选择计算模式，确认人数或者件数，输入金额、数量\n即可计算出每个人或每件商品分摊优惠之后的金额',
-            discountsAll: '优\xa0惠\xa0金\xa0额\xa0:',
-            freightAll: '总\xa0\xa0\xa0运\xa0\xa0\xa0费\xa0:',
-            aGoodsAll: '(可修改)\xa0\xa0\xa0:',
-            personNo: '总\xa0\xa0\xa0人\xa0\xa0\xa0数\xa0:',
-            goodsNo: '总\xa0商\xa0品\xa0数\xa0:',
+            goodsAllTitle: '商品模式：计算每件商品分摊优惠和运费之后的单价。',
+            personAllTitle: '人均模式：计算参与人员分摊优惠和运费之后的应付金额。',
+            discountsAll: '优\xa0惠\xa0金\xa0额',
+            freightAll: '总\xa0\xa0\xa0运\xa0\xa0\xa0费',
+            aGoodsAll: '(可修改)',
+            personNo: '总\xa0\xa0\xa0人\xa0\xa0\xa0数',
+            goodsNo: '总\xa0商\xa0品\xa0数',
         },
 
         listData: [], //结果展示数据，【“A”：“22.20”】
@@ -32,6 +33,7 @@ Page({
         animationData: {}, //动画
         maskAnimationData: {},
         copyrightHeight: "",
+        finnalHeight: 425,
 
         userInfo: {}, //用户信息
         hasUserInfo: false,
@@ -74,10 +76,28 @@ Page({
             success: res => {
                 this.setData({
                     scrollHeight: parseInt(res.windowHeight),
-                    copyrightHeight: parseInt(res.windowHeight) - 440
+                    copyrightHeight: parseInt(res.windowHeight) - this.data.finnalHeight
                 })
             }
         });
+    },
+
+    /**
+     * 摇一摇
+     */
+    onShow: function() {
+        //重力加速度
+        wx.onAccelerometerChange(function(res) {
+            if (res.x > .4 && res.y > .4 || 
+                res.x > .4 && res.z > .4 || 
+                res.z > .4 && res.y > .4) {
+                wx.showToast({
+                    title: '👀',
+                    icon: 'none',
+                    duration: 2000
+                });
+            }
+        })
     },
 
     //获取用户信息
@@ -92,7 +112,7 @@ Page({
 
     //选择人数
     bindPickerChange: function(e) {
-        var copyheight = this.data.scrollHeight - 440 - 41 * e.detail.value
+        var copyheight = this.data.scrollHeight - this.data.finnalHeight - 41 * e.detail.value
         if (copyheight < 20) {
             copyheight = 20
         };
@@ -359,7 +379,7 @@ Page({
             personNm: 0,
             resetNull: "",
             reset_One: 1,
-            copyrightHeight: this.data.scrollHeight - 440
+            copyrightHeight: this.data.scrollHeight - this.data.finnalHeight
         })
     },
 

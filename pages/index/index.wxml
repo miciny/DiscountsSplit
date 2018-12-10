@@ -10,7 +10,7 @@
             </block>
 
             <!--清空按钮-->
-            <button class="resetBtn" bindtap="resetData"> 清 空 </button>
+            <button class="resetBtn"  hover-class='calculateBtn_hover' bindtap="resetData"> 清 空 </button>
         </view>
 
 
@@ -23,16 +23,25 @@
         <!--输入表格-->
         <form bindsubmit="formSubmit" bindreset="formReset" class="inputForm">
             <view class="section section-top">
-                <text class="inputAll-label-title">{{inputAll.goodsAllTitle}}</text>
+                <block wx:if="{{calculateMode == 1}}">
+                    <text class="inputAll-label-title">{{inputAll.goodsAllTitle}}</text>
+                </block>
+
+                <block wx:if="{{calculateMode == 0}}">
+                    <text class="inputAll-label-title">{{inputAll.personAllTitle}}</text>
+                </block>
+
             </view>
 
             <view class="section">
                 <view class="inputAll-label">{{inputAll.discountsAll}}</view>
+                <text class='maohao'>:</text>
                 <input class="inputAll-input" name="discountsAll" placeholder='0.00' value='{{resetNull}}' type='digit' focus="{{focus}}" />
             </view>
 
             <view class="section">
                 <view class="inputAll-label">{{inputAll.freightAll}}</view>
+                <text class='maohao'>:</text>
                 <input class="inputAll-input" name="freightAll" placeholder='0.00' value='{{resetNull}}' type='digit' />
             </view>
 
@@ -40,9 +49,10 @@
                 <view class="inputAll-must-label">*</view>
 
                 <text class="inputAll-label">
-          <block wx:if="{{calculateMode == 0}}">{{inputAll.personNo}}</block>
-          <block wx:if="{{calculateMode == 1}}">{{inputAll.goodsNo}}</block>
-        </text>
+                    <block wx:if="{{calculateMode == 0}}">{{inputAll.personNo}}</block>
+                    <block wx:if="{{calculateMode == 1}}">{{inputAll.goodsNo}}</block>
+                </text>
+                <text class='maohao'>:</text>
 
                 <picker bindchange="bindPickerChange" value="{{personNm}}" range="{{array}}">
                     <view class="picker">
@@ -55,7 +65,7 @@
             <!--循环显示输入栏-->
             <view class="section" wx:for="{{array[personNm]}}" wx:key="*this">
                 <input class="inputAll-name-input" name="name_{{arrayA[index]}}" placeholder='{{arrayA[index]}}{{inputAll.aGoodsAll}}' value='{{resetNull}}'></input>
-
+                <text class='maohao'>:</text>
                 <input class="inputAll-input" name="{{arrayA[index]}}" placeholder='0.00(总)' type='digit' value='{{resetNull}}'></input>
 
                 <!--如果为商品模式，显示数量栏-->
@@ -66,7 +76,7 @@
             </view>
 
             <view class="calculateView">
-                <button class="calculateBtn" formType="submit">计\t算</button>
+                <button class="calculateBtn" hover-class='calculateBtn_hover' formType="submit">计\t算</button>
             </view>
 
             <view class='takeHeight' style='height: {{copyrightHeight}}px'></view>

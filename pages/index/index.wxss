@@ -90,7 +90,7 @@
 }
 
 .section-top {
-    height: 40px;
+    height: 25px;
 }
 
 .inputAll-must-label {
@@ -112,7 +112,7 @@
 
 .inputAll-label {
     font-size: 30rpx;
-    width: 180rpx;
+    width: 150rpx;
     margin-left: 10px;
     margin-top: 8px;
     height: 7px;
@@ -126,14 +126,19 @@
 
 .inputAll-name-input {
     font-size: 30rpx;
-    width: 180rpx;
+    width: 150rpx;
     margin-left: 10px;
     margin-top: 2px;
     padding: 1px 1px 1px 3px;
 }
 
+.maohao{
+    width: 10rpx;
+    margin-top: 7px;
+}
+
 .inputAll-input {
-    margin-left: 0px;
+    margin-left: 5px;
     margin-right: 6px;
     margin-top: 4px;
     outline: 0 none;
@@ -158,6 +163,7 @@
 }
 
 .picker {
+    margin-left: 4px;
     padding-left: 8px;
     font-size: 32rpx;
     margin-top: 8px;
@@ -168,14 +174,14 @@
 }
 
 .calculateView {
-    margin-top: 25rpx;
     width: 100%;
     align-content: center;
     align-items: center;
+    margin-top: 15px;
 }
 
 .calculateBtn {
-    width: 40%;
+    width: 80%;
     line-height: 38px;
     text-align: center;
     color: #000;
@@ -184,6 +190,10 @@
     position: relative;
     overflow: hidden;
     background-color: #66cdaa;
+}
+
+.calculateBtn_hover{
+    background-color: darkgreen;
 }
 
 .table {
