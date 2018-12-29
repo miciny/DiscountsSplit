@@ -23,15 +23,18 @@ Page({
         arrayA: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'], //选择的人数对应的字母
         focus: false, //第一个框是否聚焦
 
-        calculateMode: 1,
+        calculateMode: 1,   //1商品  0人均
+        chooseColor: "rgb(17, 209, 10)",
         chooseColor_zero: "black",
         chooseColor_one: "rgb(17, 209, 10)",
 
         resetNull: "", //清空时，给输入框的赋值
+        resetName: "",
         reset_One: 1, //清空时，给输入框的赋值
         scrollHeight: "", //页面滚动高度赋值
         animationData: {}, //动画
         maskAnimationData: {},
+        iconAnimationData: {},
         copyrightHeight: "",
         finnalHeight: 425,
 
@@ -110,6 +113,50 @@ Page({
         })
     },
 
+    //点击头像，添加自己的名字
+    previewImg: function () {
+        if (Object.keys(this.data.iconAnimationData).length == 0) {
+            this.setIconAnimation(); 
+        }
+
+        if (this.data.calculateMode == 1){
+            return
+        }
+
+        this.setData({
+            resetName: this.data.userInfo.nickName,
+        })
+    },
+    
+    //点击头像,旋转自己
+    setIconAnimation: function() {
+        var animation = wx.createAnimation({
+            duration: 3000,
+            timingFunction: "linear",
+        });
+        this.animation = animation;
+        animation.rotate(360).step();
+
+        this.setData({
+            iconAnimationData: animation.export(),
+        })
+
+        setTimeout(() => {
+            animation.rotate(0).step({
+                duration: 0,
+            });
+            this.setData({
+                iconAnimationData: animation.export(),
+            })
+        }, 3000);
+
+        setTimeout(() => {
+            this.setData({
+                iconAnimationData: {},
+            })
+        }, 3000);
+    },
+
     //选择人数
     bindPickerChange: function(e) {
         var copyheight = this.data.scrollHeight - this.data.finnalHeight - 41 * e.detail.value
@@ -118,7 +165,7 @@ Page({
         };
 
         this.setData({
-            personNm: e.detail.value,
+            personNm: parseInt(e.detail.value),
             listData: [],
             tabelShowFlag: false,
             copyrightHeight: copyheight
@@ -131,12 +178,12 @@ Page({
         if (e.currentTarget.id == 1) {
             this.setData({
                 chooseColor_zero: "black",
-                chooseColor_one: "rgb(17, 209, 10)"
+                chooseColor_one: this.data.chooseColor
             })
         } else if (e.currentTarget.id == 0) {
             this.setData({
                 chooseColor_one: "black",
-                chooseColor_zero: "rgb(17, 209, 10)"
+                chooseColor_zero: this.data.chooseColor
             })
         }
 
@@ -343,7 +390,7 @@ Page({
         var animationMask = wx.createAnimation({
             timingFunction: 'ease',
         })
-        animationMask.opacity(0.8).step({
+        animationMask.opacity(0.9).step({
             duration: 400
         })
 
@@ -378,6 +425,7 @@ Page({
         this.setData({
             personNm: 0,
             resetNull: "",
+            resetName: "",
             reset_One: 1,
             copyrightHeight: this.data.scrollHeight - this.data.finnalHeight
         })
@@ -386,7 +434,7 @@ Page({
     //分享app
     onShareAppMessage: function(res) {
         return {
-            title: '好用的拼单拆分计算小程序',
+            title: '拼单拆分计算小程序',
             path: 'pages/index/index',
             imageUrl: ''
         }

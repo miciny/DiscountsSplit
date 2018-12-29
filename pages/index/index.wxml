@@ -5,7 +5,7 @@
         <view class="userinfo">
             <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="onGotUserInfo" class="userInfoGetBtn"> 获取头像昵称 </button>
             <block wx:else>
-                <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+                <image class="userinfo-avatar"  animation="{{iconAnimationData}}" src="{{userInfo.avatarUrl}}" mode="cover" bindtap='previewImg'></image>
                 <text class="userinfo-nickname">{{userInfo.nickName}}</text>
             </block>
 
@@ -64,7 +64,7 @@
 
             <!--循环显示输入栏-->
             <view class="section" wx:for="{{array[personNm]}}" wx:key="*this">
-                <input class="inputAll-name-input" name="name_{{arrayA[index]}}" placeholder='{{arrayA[index]}}{{inputAll.aGoodsAll}}' value='{{resetNull}}'></input>
+                <input class="inputAll-name-input" name="name_{{arrayA[index]}}" placeholder='{{arrayA[index]}}{{inputAll.aGoodsAll}}' value="{{index==personNm+1 ? resetName : resetNull}}"></input>
                 <text class='maohao'>:</text>
                 <input class="inputAll-input" name="{{arrayA[index]}}" placeholder='0.00(总)' type='digit' value='{{resetNull}}'></input>
 
@@ -87,12 +87,12 @@
     </scroll-view>
 
     <!--弹窗-->
-    <view class="modal-mask" bindtap="delayHideModal" animation="{{maskAnimationData}}" wx:if="{{tabelShowFlag}}" catchtouchmove="preventTouchMove">
+    <view class="modal-mask" animation="{{maskAnimationData}}" wx:if="{{tabelShowFlag}}">
     </view>
 
     <!--输出结果-->
-    <view class='modal-dialog-upview' wx:if="{{tabelShowFlag}}">
-        <view class="modal-dialog" catchtouchmove="preventTouchMove" animation="{{animationData}}">
+    <view class='modal-dialog-upview'  bindtap="delayHideModal" catchtouchmove="preventTouchMove" wx:if="{{tabelShowFlag}}">
+        <view class="modal-dialog" catchtap="preventTouchMove" animation="{{animationData}}">
             <view class="modal-content">
                 <view class="table">
                     <view class="tr bg-title">
@@ -174,7 +174,7 @@
                 </view>
             </view>
             <view class="modal-footer">
-                <view class="btn-confirm" bindtap="onConfirm" data-status="confirm">确定</view>
+                <button class="btn-confirm" bindtap="onConfirm" data-status="confirm">确定</button>
             </view>
         </view>
     </view>

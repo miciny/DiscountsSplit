@@ -218,7 +218,7 @@
 }
 
 .bg-title {
-    background: snow;
+    background: #008B45;
     font-size: 30rpx;
 }
 
@@ -228,7 +228,7 @@
 }
 
 .bg-w {
-    background: lightgray;
+    background: rgb(175, 175, 175);
     font-size: 30rpx;
 }
 
@@ -240,7 +240,6 @@
 .th {
     width: 100%;
     justify-content: center;
-    background: darkgray;
     color: #fff;
     display: flex;
     height: 2rem;
@@ -266,7 +265,7 @@
     z-index: 9999;
     background: #f9f9f9;
     opacity: 1;
-    border-radius: 36rpx;
+    border-radius: 24rpx;
 }
 
 .modal-dialog-upview {
@@ -313,10 +312,9 @@
     width: 100%;
     height: 100%;
     font-size: 35rpx;
-    color: #000;
-    text-align: center;
-    border-style: none;
-    border-color: white;
+}
+.btn-confirm::after {
+    border: none;
 }
 
 .copyright {
