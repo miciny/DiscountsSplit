@@ -17,25 +17,35 @@ Page({
         },
 
         listData: [], //结果展示数据，【“A”：“22.20”】
-        tabelShowFlag: false, //结果展示的table是否显示
         personNm: 0, //选择的人数的底标
         array: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], //选择的人数
         arrayA: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'], //选择的人数对应的字母
+
+        tabelShowFlag: false, //结果展示的table是否显示
         focus: false, //第一个框是否聚焦
+        showLastDataFlag: false, //是否显示上次数据的按钮的flag
 
         calculateMode: 1,   //1商品  0人均
-        chooseColor: "rgb(17, 209, 10)",
+        chooseColor: "rgb(17, 209, 10)", //切换模式，按钮的颜色
         chooseColor_zero: "black",
         chooseColor_one: "rgb(17, 209, 10)",
 
-        resetNull: "", //清空时，给输入框的赋值
-        resetName: "",
-        reset_One: 1, //清空时，给输入框的赋值
+        resetDis: "",   //总优惠的value值，输入框改变，不影响
+        resetFreig: "",   //总运费的value值，输入框改变，不影响
+        
+        //记录输入框的值
+        resetNameArray: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], 
+        resetPerMoneyArray: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        resetPerNmArray: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        setNameID: "setNameID", //最后一个名字输入框id
+
         scrollHeight: "", //页面滚动高度赋值
         animationData: {}, //动画
-        maskAnimationData: {},
-        iconAnimationData: {},
-        copyrightHeight: "",
+        maskAnimationData: {}, //浮层显示动画
+        iconAnimationData: {}, //icon旋转动画
+        nameAnimationData: {}, //名字动的动画
+
+        copyrightHeight: "", 
         finnalHeight: 425,
 
         userInfo: {}, //用户信息
@@ -83,6 +93,17 @@ Page({
                 })
             }
         });
+
+        //是否显示上次数据按钮
+        wx.getStorage({
+            key: 'LastData',
+            success: res => {
+                if(res.data == null){
+                    this.setData({showLastDataFlag: false})
+                } else {
+                    this.setData({showLastDataFlag: true})
+                }},
+        });
     },
 
     /**
@@ -115,17 +136,77 @@ Page({
 
     //点击头像，添加自己的名字
     previewImg: function () {
+
+        //头像旋转时，不动
         if (Object.keys(this.data.iconAnimationData).length == 0) {
             this.setIconAnimation(); 
         }
+        if (this.data.calculateMode == 1) { return }  //模式1，不动
 
-        if (this.data.calculateMode == 1){
-            return
+        //输入框名字有了，不动
+        if (this.data.resetNameArray[this.data.personNm+1] == this.data.userInfo.nickName){return;};
+
+        //名字移动时，不动
+        if (Object.keys(this.data.nameAnimationData).length == 0) {
+            this.moveName();
+            setTimeout(() => {
+                var name = "resetNameArray[" + (this.data.personNm+1) + "]";
+                this.setData({[name]: this.data.userInfo.nickName})
+            }, 1000);
         }
+    },
 
+    //输入框输入时，记录相应的数据
+    nameInputEidt: function(e){
+        var index = e.target.dataset.index
+        var name = "resetNameArray[" + index + "]";
         this.setData({
-            resetName: this.data.userInfo.nickName,
+            [name]: e.detail.value
         })
+    },
+    moneyNoInputEidt: function (e) {
+        var index = e.target.dataset.index
+        var name = "resetPerMoneyArray[" + index + "]";
+        this.setData({
+            [name]: e.detail.value
+        })
+    },
+    goodsNoInputEidt: function (e) {
+        var index = e.target.dataset.index
+        var name = "resetPerNmArray[" + index + "]";
+        this.setData({
+            [name]: e.detail.value
+        })
+    },
+
+    //移动名字
+    moveName: function () {
+        var query = wx.createSelectorQuery();
+        var that = this;
+
+        var animation = wx.createAnimation({
+            duration: 1000,
+            delay: 0,
+            timingFunction: "ease",
+        });
+
+        //先找到名字的位置
+        query.select('#nickName').boundingClientRect(function (rect) {
+            var queryT = wx.createSelectorQuery();
+            //再找到输入框的位置
+            queryT.select('#setNameID').boundingClientRect(function (rec) {
+                animation.translate((rec.left - rect.left), (rec.top - rect.top)).step({ duration: 1000 })
+                that.setData({ nameAnimationData: animation.export() })
+                //移动过去后，在马上显示回原位置
+                setTimeout(() => {
+                    animation.translate(0, 0).step({duration: 0,});
+                    that.setData({ nameAnimationData: animation.export() })
+                }, 1000);
+                setTimeout(() => {
+                    that.setData({ nameAnimationData: {}})
+                }, 1100);
+            }).exec();
+        }).exec();
     },
     
     //点击头像,旋转自己
@@ -137,61 +218,42 @@ Page({
         this.animation = animation;
         animation.rotate(360).step();
 
-        this.setData({
-            iconAnimationData: animation.export(),
-        })
+        this.setData({iconAnimationData: animation.export()})
 
         setTimeout(() => {
             animation.rotate(0).step({
                 duration: 0,
             });
-            this.setData({
-                iconAnimationData: animation.export(),
-            })
+            this.setData({iconAnimationData: animation.export()})
         }, 3000);
 
         setTimeout(() => {
-            this.setData({
-                iconAnimationData: {},
-            })
+            this.setData({iconAnimationData: {}})
         }, 3000);
     },
 
-    //选择人数
+    //选择人数，手动选择
     bindPickerChange: function(e) {
-        var copyheight = this.data.scrollHeight - this.data.finnalHeight - 41 * e.detail.value
+        this.pickerChange(e.detail.value)
+    },
+
+    //选择人数的方法
+    pickerChange: function(index){
+        var copyheight = this.data.scrollHeight - this.data.finnalHeight - 41 * index
         if (copyheight < 20) {
             copyheight = 20
         };
-
         this.setData({
-            personNm: parseInt(e.detail.value),
+            personNm: parseInt(index),
             listData: [],
             tabelShowFlag: false,
             copyrightHeight: copyheight
         })
     },
 
-    //选择模式
-    setModel: function(e) {
-
-        if (e.currentTarget.id == 1) {
-            this.setData({
-                chooseColor_zero: "black",
-                chooseColor_one: this.data.chooseColor
-            })
-        } else if (e.currentTarget.id == 0) {
-            this.setData({
-                chooseColor_one: "black",
-                chooseColor_zero: this.data.chooseColor
-            })
-        }
-
-        this.setData({
-            calculateMode: e.currentTarget.id,
-            listData: [],
-            tabelShowFlag: false
-        })
+    //选择模式，手动选择
+    setModel: function (e) {
+        this.swithModeBtn(e.currentTarget.id)
     },
 
     //检查元素是否在数组中
@@ -222,7 +284,7 @@ Page({
     },
 
     //计算显示
-    formSubmit: function(e) {
+    formSubmit: function (e) {
         var b = this.getPrice(e.detail.value['discountsAll']); //总优惠
         var c = this.getPrice(e.detail.value['freightAll']); //总运费
 
@@ -372,7 +434,96 @@ Page({
             })
 
             this.setAnimation()
+
+            //异步保存数据
+            var datas = "" + this.data.calculateMode +  //calculateMode
+                        ";" + b +                       //discountsAll
+                        ";" + c +                       //freightAll
+                        ";" + this.data.personNm  //personNm
+            for (var item in listDataTem) {
+                datas += ";" + listDataTem[item].name
+                datas += "," + listDataTem[item].goods
+                //如果商品模式
+                if (this.data.calculateMode == 1) {
+                    datas += "," + listDataTem[item].goodsNo
+                }
+            }
+            wx.setStorage({
+                key: "LastData",
+                data: datas
+            })
+            this.setData({
+                showLastDataFlag: true
+            })
+
         }
+    },
+
+    //加载数据，给出提示
+    loadLastDataBtn: function(){
+        this.setData({focus: false})
+        wx.showModal({
+            title: '提示',
+            content: '加载上次数据将覆盖已输入的数据，是否继续？',
+            success: res => {
+                if (res.confirm){
+                    this.loadLastData()
+                }else if (res.cancel) {return}
+            }
+        })  
+    },
+
+    //加载上次数据
+    loadLastData: function(){
+        wx.getStorage({
+            key: 'LastData',
+            success: res => {
+                var d = res.data
+                var dBig = d.split(";")
+
+                this.swithModeBtn(dBig[0])
+                this.pickerChange(dBig[3])
+                this.setData({
+                    resetDis: (dBig[1] == 0) ? "" : dBig[1],
+                    resetFreig: (dBig[2] == 0) ? "" : dBig[2]
+                })
+
+                for (var i = 4; i < dBig.length - 1; i++) {
+                    var dSmall = dBig[i].split(",")
+                    var name = "resetNameArray[" + (i - 4) + "]";
+                    this.setData({[name]: dSmall[0]})
+
+                    var perMoney = "resetPerMoneyArray[" + (i - 4) + "]"; 
+                    this.setData({[perMoney]: dSmall[1]})
+
+                    if (dBig[0] == 1) {
+                        var perNm = "resetPerNmArray[" + (i - 4) + "]";
+                        this.setData({[perNm]: dSmall[2]})
+                    }
+                }
+            },
+        })
+    },
+
+    //选择模式,设置按钮颜色
+    swithModeBtn: function (e){
+        if (e == 1) {
+            this.setData({
+                chooseColor_zero: "black",
+                chooseColor_one: this.data.chooseColor
+            })
+        } else if (e == 0) {
+            this.setData({
+                chooseColor_one: "black",
+                chooseColor_zero: this.data.chooseColor
+            })
+        }
+
+        this.setData({
+            calculateMode: e,
+            listData: [],
+            tabelShowFlag: false
+        })
     },
 
     //动画
@@ -424,9 +575,11 @@ Page({
     resetData: function(e) {
         this.setData({
             personNm: 0,
-            resetNull: "",
-            resetName: "",
-            reset_One: 1,
+            resetDis: "",
+            resetFreig: "",
+            resetNameArray: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+            resetPerMoneyArray: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+            resetPerNmArray: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
             copyrightHeight: this.data.scrollHeight - this.data.finnalHeight
         })
     },

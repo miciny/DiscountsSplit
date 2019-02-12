@@ -3,10 +3,12 @@
     <scroll-view class="container_root" scroll-y style="height:{{scrollHeight}}px;">
         <!--头像-->
         <view class="userinfo">
+            <!--无头像-->
             <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="onGotUserInfo" class="userInfoGetBtn"> 获取头像昵称 </button>
             <block wx:else>
+                <!--有头像-->
                 <image class="userinfo-avatar"  animation="{{iconAnimationData}}" src="{{userInfo.avatarUrl}}" mode="cover" bindtap='previewImg'></image>
-                <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+                <text class="userinfo-nickname" animation="{{nameAnimationData}}"  id='nickName'>{{userInfo.nickName}}</text>
             </block>
 
             <!--清空按钮-->
@@ -18,42 +20,42 @@
         <view class='choose'>
             <button class="chooseBtn" bindtap="setModel" id="1" style="color: {{chooseColor_one}};"> 商品模式 </button>
             <button class="chooseBtn" bindtap="setModel" id="0" style="color: {{chooseColor_zero}};"> 人均模式 </button>
+            <button class="lastDataBtn" bindtap="loadLastDataBtn" wx:if="{{showLastDataFlag}}"> 上次数据 </button>
         </view>
 
         <!--输入表格-->
         <form bindsubmit="formSubmit" bindreset="formReset" class="inputForm">
             <view class="section section-top">
+                <!--文字说明-->
                 <block wx:if="{{calculateMode == 1}}">
                     <text class="inputAll-label-title">{{inputAll.goodsAllTitle}}</text>
                 </block>
-
                 <block wx:if="{{calculateMode == 0}}">
                     <text class="inputAll-label-title">{{inputAll.personAllTitle}}</text>
                 </block>
-
             </view>
 
+            <!--优惠金额-->
             <view class="section">
                 <view class="inputAll-label">{{inputAll.discountsAll}}</view>
                 <text class='maohao'>:</text>
-                <input class="inputAll-input" name="discountsAll" placeholder='0.00' value='{{resetNull}}' type='digit' focus="{{focus}}" />
+                <input class="inputAll-input" name="discountsAll" placeholder='0.00' value='{{resetDis}}' type='digit' focus="{{focus}}" />
             </view>
-
+            <!--总运费-->
             <view class="section">
                 <view class="inputAll-label">{{inputAll.freightAll}}</view>
                 <text class='maohao'>:</text>
-                <input class="inputAll-input" name="freightAll" placeholder='0.00' value='{{resetNull}}' type='digit' />
+                <input class="inputAll-input" name="freightAll" placeholder='0.00' value='{{resetFreig}}' type='digit' />
             </view>
-
+            <!--总商品数-->
             <view class="section">
                 <view class="inputAll-must-label">*</view>
-
                 <text class="inputAll-label">
                     <block wx:if="{{calculateMode == 0}}">{{inputAll.personNo}}</block>
                     <block wx:if="{{calculateMode == 1}}">{{inputAll.goodsNo}}</block>
                 </text>
                 <text class='maohao'>:</text>
-
+                <!--pickerView-->
                 <picker bindchange="bindPickerChange" value="{{personNm}}" range="{{array}}">
                     <view class="picker">
                         <block wx:if="{{calculateMode == 0}}">{{array[personNm]}}人</block>
@@ -64,24 +66,30 @@
 
             <!--循环显示输入栏-->
             <view class="section" wx:for="{{array[personNm]}}" wx:key="*this">
-                <input class="inputAll-name-input" name="name_{{arrayA[index]}}" placeholder='{{arrayA[index]}}{{inputAll.aGoodsAll}}' value="{{index==personNm+1 ? resetName : resetNull}}"></input>
+                <!--名字输入-->
+                <block wx:if="{{index==personNm+1}}">
+                    <input class="inputAll-name-input" name="name_{{arrayA[index]}}" data-index="{{index}}" placeholder='{{arrayA[index]}}{{inputAll.aGoodsAll}}' value="{{resetNameArray[index]}}" id='{{setNameID}}' bindinput="nameInputEidt"></input>
+                </block>
+                <block wx:else>
+                    <input class="inputAll-name-input" name="name_{{arrayA[index]}}"  data-index="{{index}}" placeholder='{{arrayA[index]}}{{inputAll.aGoodsAll}}' value="{{resetNameArray[index]}}" bindinput="nameInputEidt"></input>
+                </block>
                 <text class='maohao'>:</text>
-                <input class="inputAll-input" name="{{arrayA[index]}}" placeholder='0.00(总)' type='digit' value='{{resetNull}}'></input>
-
+                <!--金额输入-->
+                <input class="inputAll-input" name="{{arrayA[index]}}" placeholder='0.00(总)' type='digit' value="{{resetPerMoneyArray[index]}}" data-index="{{index}}" bindinput="moneyNoInputEidt"></input>
                 <!--如果为商品模式，显示数量栏-->
                 <block wx:if="{{calculateMode == 1}}">
                     <text class="inputAll-label inputAll-label-goodstitle">数量: </text>
-                    <input class="inputAll-input-goodsNo" name="GoodsNo_{{arrayA[index]}}" placeholder='1' type='number' value='{{reset_One}}'></input>
+                    <input class="inputAll-input-goodsNo" name="GoodsNo_{{arrayA[index]}}" placeholder='1' type='number' value="{{resetPerNmArray[index]}}" data-index="{{index}}" bindinput="goodsNoInputEidt"></input>
                 </block>
             </view>
-
+            <!--计算按钮-->
             <view class="calculateView">
                 <button class="calculateBtn" hover-class='calculateBtn_hover' formType="submit">计\t算</button>
             </view>
-
+            <!--CopyRight-->
             <view class='takeHeight' style='height: {{copyrightHeight}}px'></view>
             <view class='copyrightView'>
-                <text class='copyright'>©2018 Caiyuan Mao. All Rights Reserved</text>
+                <text class='copyright'>©2018 Caiyuan Mao. All Rights Reserved.</text>
             </view>
         </form>
     </scroll-view>
@@ -119,7 +127,8 @@
                         </block>
 
                     </view>
-                    <scroll-view class='modal-dialog-scroll' scroll-y style="height: {{listData.length<=10 ? listData.length*2 : 22}}rem;">
+                    <!--显示数据的scrollView，12为数量，每个高度2rem-->
+                    <scroll-view class='modal-dialog-scroll' scroll-y style="height: {{listData.length<=12 ? listData.length*2 : 26}}rem;">
                         <block wx:for="{{listData}}" wx:key="{{code}}">
                             <view class="tr bg-t" wx:if="{{index == listData.length-1}}">
                                 <view class="td td-totle">{{item.name}}</view>
