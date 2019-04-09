@@ -46,7 +46,7 @@ Page({
         nameAnimationData: {}, //名字动的动画
 
         copyrightHeight: "", 
-        finnalHeight: 425,
+        finnalHeight: 825,
 
         userInfo: {}, //用户信息
         hasUserInfo: false,
@@ -88,8 +88,8 @@ Page({
         wx.getSystemInfo({
             success: res => {
                 this.setData({
-                    scrollHeight: parseInt(res.windowHeight),
-                    copyrightHeight: parseInt(res.windowHeight) - this.data.finnalHeight
+                    scrollHeight: parseInt(res.windowHeight * (750 / res.windowWidth)),
+                    copyrightHeight: parseInt(res.windowHeight * (750 / res.windowWidth)) - this.data.finnalHeight
                 })
             }
         });
@@ -107,7 +107,7 @@ Page({
     },
 
     /**
-     * 摇一摇
+     * 摇一摇彩蛋
      */
     onShow: function() {
         //重力加速度
@@ -239,9 +239,9 @@ Page({
 
     //选择人数的方法
     pickerChange: function(index){
-        var copyheight = this.data.scrollHeight - this.data.finnalHeight - 41 * index
-        if (copyheight < 20) {
-            copyheight = 20
+        var copyheight = this.data.scrollHeight - this.data.finnalHeight - 71 * index
+        if (copyheight < 60) {
+            copyheight = 60
         };
         this.setData({
             personNm: parseInt(index),

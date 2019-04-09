@@ -1,8 +1,8 @@
 /**index.wxss**/
 
 .container_root {
-    top: 0px;
-    left: 0px;
+    top: 0rpx;
+    left: 0rpx;
     width: 100%;
     overflow: hidden;
     position: fixed;
@@ -13,12 +13,12 @@
 
 .userinfo {
     display: flex;
-    margin-left: 15px;
-    margin-top: 5px;
+    margin-left: 15rpx;
+    margin-top: 5rpx;
     flex-direction: row;
     align-items: center;
     width: 100%;
-    height: 45px;
+    height: 90rpx;
 }
 
 .userinfo-avatar {
@@ -30,17 +30,17 @@
 
 .userinfo-nickname {
     color: #aaa;
-    margin-left: 10px;
+    margin-left: 20rpx;
 }
 
 .userInfoGetBtn {
-    margin-left: 5px;
+    margin-left: 5rpx;
     font-size: 30rpx;
     float: left;
 }
 
 .resetBtn {
-    margin-right: 30px;
+    margin-right: 50rpx;
     font-size: 30rpx;
     height: 70rpx;
     float: right;
@@ -53,9 +53,9 @@
 
 .choose {
     border-top-style: solid;
-    border-top-width: 8px;
+    border-top-width: 15rpx;
     border-color: rgba(231, 224, 224, 0.8);
-    height: 50px;
+    height: 90rpx;
     flex-direction: row;
     vertical-align: middle;
 }
@@ -63,122 +63,123 @@
 .chooseBtn {
     width: 30%;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 10rpx;
     position: relative;
     vertical-align: middle;
-    margin-left: 10px;
-    margin-top: 8px;
-    font-size: 17px;
-    height: 40px;
+    margin-left: 20rpx;
+    margin-top: 15rpx;
+    font-size: 30rpx;
+    height: 70rpx;
     float: left;
 }
 
 .lastDataBtn{
-    width: 72px;
-    height: 30px;
-    margin-right: 5px;
+    width: 140rpx;
+    height: 50rpx;
+    margin-right: 20rpx;
     text-align: center;
-    border-radius: 5px;
-    font-size: 13px;
-    margin-top: 15px;
-    padding-left: 10px;
+    border-radius: 5rpx;
+    font-size: 22rpx;
+    margin-top: 25rpx;
+    padding-left: 20rpx;
 }
 
 .section {
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: 30px;
+    height: 60rpx;
     vertical-align: middle;
     background: rgba(255, 255, 255, 0.3);
     border-color: rgba(231, 224, 224, 0.8);
     border-bottom-style: solid;
-    border-bottom-width: 1px;
+    border-bottom-width: 2rpx;
     line-height: 100%;
     list-style: none;
-    padding: 5px 5px;
-    margin-bottom: 0px;
+    padding: 8rpx 8rpx;
+    margin-bottom: 0rpx;
 }
 
 .section-top {
-    height: 25px;
+    height: 50rpx;
 }
 
 .inputAll-must-label {
     font-size: 30rpx;
-    width: 10px;
-    margin-right: -10px;
-    margin-top: 10px;
-    height: 7px;
+    width: 20rpx;
+    margin-right: -20rpx;
+    margin-top: 15rpx;
+    height: 14rpx;
     color: red;
 }
 
 .inputAll-label-title {
     font-size: 24rpx;
-    margin-left: 5px;
-    margin-top: 3px;
-    padding: 1px 1px 1px 2px;
+    margin-left: 5rpx;
+    margin-top: 10rpx;
+    padding: 2rpx 1rpx 1rpx 4rpx;
     color: grey;
 }
 
 .inputAll-label {
     font-size: 30rpx;
     width: 150rpx;
-    margin-left: 10px;
-    margin-top: 8px;
-    height: 7px;
-    padding: 1px 1px 1px 2px;
+    margin-left: 20rpx;
+    margin-top: 16rpx;
+    height: 10rpx;
+    padding: 1rpx 1rpx 1rpx 4rpx;
     color: black;
 }
 
 .inputAll-label-goodstitle {
-    width: 30rpx;
+    width: 50rpx;
 }
 
 .inputAll-name-input {
     font-size: 30rpx;
     width: 150rpx;
-    margin-left: 10px;
-    margin-top: 2px;
-    padding: 1px 1px 1px 3px;
+    margin-left: 20rpx;
+    margin-top: 8rpx;
+    padding: 1rpx 1rpx 1rpx 3rpx;
+    line-height: 30rpx;
 }
 
 .maohao{
-    width: 10rpx;
-    margin-top: 7px;
+    width: 18rpx;
+    margin-top: 16rpx;
 }
 
 .inputAll-input {
-    margin-left: 5px;
-    margin-right: 6px;
-    margin-top: 4px;
+    margin-left: 10rpx;
+    margin-right: 12rpx;
+    margin-top: 10rpx;
     outline: 0 none;
-    padding: 1px 1px 1px 5px;
+    padding: 2rpx 1rpx 1rpx 5rpx;
     width: 180rpx;
     font-size: 30rpx;
-    line-height: 15px;
+    line-height: 30rpx;
 }
 
 .inputAll-input-goodsNo {
-    margin-left: 30px;
-    margin-top: 4px;
+    margin-left: 40rpx;
+    margin-top: 8rpx;
     outline: 0 none;
-    padding: 1px 1px 1px 5px;
-    width: 70rpx;
+    padding: 1rpx 1rpx 1rpx 10rpx;
+    width: 100rpx;
     font-size: 30rpx;
-    line-height: 15px;
+    line-height: 30rpx;
     border-style: solid;
-    border-radius: 4px;
-    border-width: 1px;
+    border-radius: 10rpx;
+    border-width: 2rpx;
     border-color: darkgray;
 }
 
 .picker {
-    margin-left: 4px;
-    padding-left: 8px;
+    margin-left: 10rpx;
+    padding-left: 10rpx;
     font-size: 32rpx;
-    margin-top: 8px;
-    height: 7px;
+    margin-top: 14rpx;
+    height: 10rpx;
     color: darkgreen;
     text-decoration: underline;
     font-weight: bold;
@@ -188,16 +189,17 @@
     width: 100%;
     align-content: center;
     align-items: center;
-    margin-top: 15px;
+    margin-top: 30rpx;
+    height: 100rpx;
 }
 
 .calculateBtn {
     width: 80%;
-    line-height: 38px;
+    line-height: 70rpx;
     text-align: center;
     color: #000;
-    text-shadow: 1px 1px 1px #999;
-    border-radius: 5px;
+    text-shadow: 1rpx 1rpx 1rpx #999;
+    border-radius: 10rpx;
     position: relative;
     overflow: hidden;
     background-color: #66cdaa;
@@ -210,14 +212,14 @@
 .table {
     border: 0px solid darkgray;
     width: 100%;
-    margin-top: 0px;
+    margin-top: 0rpx;
 }
 
 .tr {
     display: flex;
     width: 100%;
     justify-content: center;
-    height: 2rem;
+    height: 75rpx;
     align-items: center;
 }
 
@@ -253,7 +255,7 @@
     justify-content: center;
     color: #fff;
     display: flex;
-    height: 2rem;
+    height: 75rpx;
     align-items: center;
 }
 
@@ -314,7 +316,7 @@
     display: flex;
     flex-direction: row;
     height: 86rpx;
-    border-top: 1px solid #dedede;
+    border-top: 1rpx solid #dedede;
     font-size: 34rpx;
     line-height: 86rpx;
 }
@@ -336,6 +338,6 @@
 }
 
 .copyrightView {
-    height: 15px;
+    height: 30rpx;
     text-align: center;
 }

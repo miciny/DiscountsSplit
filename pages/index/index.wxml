@@ -1,6 +1,6 @@
 <!--index.wxml-->
 <view class='container'>
-    <scroll-view class="container_root" scroll-y style="height:{{scrollHeight}}px;">
+    <scroll-view class="container_root" scroll-y style="height: {{scrollHeight}}rpx;">
         <!--头像-->
         <view class="userinfo">
             <!--无头像-->
@@ -87,7 +87,7 @@
                 <button class="calculateBtn" hover-class='calculateBtn_hover' formType="submit">计\t算</button>
             </view>
             <!--CopyRight-->
-            <view class='takeHeight' style='height: {{copyrightHeight}}px'></view>
+            <view class='takeHeight' style='height: {{copyrightHeight}}rpx'></view>
             <view class='copyrightView'>
                 <text class='copyright'>©2018 Caiyuan Mao. All Rights Reserved.</text>
             </view>
@@ -128,7 +128,7 @@
 
                     </view>
                     <!--显示数据的scrollView，12为数量，每个高度2rem-->
-                    <scroll-view class='modal-dialog-scroll' scroll-y style="height: {{listData.length<=12 ? listData.length*2 : 26}}rem;">
+                    <scroll-view class='modal-dialog-scroll' scroll-y style="height: {{listData.length<=10 ? listData.length*75 : 650}}rpx;">
                         <block wx:for="{{listData}}" wx:key="{{code}}">
                             <view class="tr bg-t" wx:if="{{index == listData.length-1}}">
                                 <view class="td td-totle">{{item.name}}</view>
